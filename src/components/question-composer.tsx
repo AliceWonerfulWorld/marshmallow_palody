@@ -1,12 +1,36 @@
 "use client";
-import { useState } from "react";
-export function QuestionComposer() {
+import { useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import type { Id } from "../../convex/_generated/dataModel";
+import { submitQuestion } from "@/app/u/[username]/actions";
+
+export function QuestionComposer({ boxId }: { boxId: Id<"questionBoxes"> }) {
   const [content, setContent] = useState("");
-  return <section className="card space-y-3">
+  const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState("");
+  const submitting = useRef(false);
+  const router = useRouter();
+  const length = content.trim().length;
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting.current || length < 1 || length > 1000) return;
+    submitting.current = true;
+    setPending(true);
+    setMessage("");
+    try {
+      const result = await submitQuestion(boxId, content);
+      if (result.ok) { setContent(""); setMessage("質問を送りました"); router.refresh(); }
+      else setMessage(result.message);
+    } catch { setMessage("送信できませんでした。時間をおいて再試行してください。"); }
+    finally { submitting.current = false; setPending(false); }
+  }
+  return <form onSubmit={submit} className="card space-y-3">
     <h2 className="text-xl font-bold">匿名で質問する</h2>
+    <p>ログイン不要です。投稿者のアカウント情報は保存しません。</p>
     <label htmlFor="question-content">質問内容</label>
-    <textarea id="question-content" className="block w-full" rows={5} value={content} onChange={event => setContent(event.target.value)} />
-    <p>{content.length}文字</p>
-    <button type="button" disabled>質問を送信（準備中）</button>
-  </section>;
+    <textarea id="question-content" aria-describedby="question-length" className="block w-full" rows={5} value={content} disabled={pending} onChange={event => setContent(event.target.value)} />
+    <p id="question-length">{length} / 1000文字</p>
+    <button type="submit" disabled={pending || length < 1 || length > 1000}>{pending ? "送信中…" : "質問を送信"}</button>
+    <p role="status">{message}</p>
+  </form>;
 }
