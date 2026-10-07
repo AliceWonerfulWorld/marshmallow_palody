@@ -15,7 +15,7 @@
 | #20 | mobile-first UI、共通tokens・ボタン・フォーム・カード・状態表示、トップCTA、Auth周辺 | `ad4898f` |
 | #19 | URLコピー、Web Share/fallback、QRカード、受信箱の初回ガイド、公開範囲の説明 | `3be6958` |
 | #17 | 本番手順・環境変数、標準webpack production build、安全なroot error表示 | `747e786` |
-| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | `726417f` |
+| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | `726417f`（受け入れ整備） / `fd1aab3`（hover contrast修正） |
 
 未完了Issue（コード・ドキュメント）: なし。
 実Clerk/Convex接続・Production deploy・本番GET検査は人間の残作業。外部設定が完了した実利用確認を代替するものではない。
