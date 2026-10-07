@@ -47,6 +47,8 @@ npm run start
 
 `npm run typecheck` はNext.jsのルート型を生成してから型検証します。`npm test` のみで実行すると監視モードになります。`npm run start` は本番ビルド後に実行してください。
 
+GitHub Actionsの [CI](.github/workflows/ci.yml) は、Pull Requestと `main` へのpush時に `npm ci`、lint、型チェック、テスト、本番ビルドを実行します。Node.jsのバージョンは `.nvmrc` に合わせ、外部サービスの秘密値は使用しません。
+
 実行環境のポート制限によりTurbopackの本番ビルドが失敗する場合は、`npm run build -- --webpack` でビルドできます。
 
 初期環境の依存関係では、Next.js公式ESLint設定のプラグインが対応するESLint 9を使用しています。インストール時にESLint 9のサポート終了警告と、lint用の間接依存 `braces` に由来する脆弱性警告が出ます。2026年10月8日の確認時点で `braces` の修正版は公開されておらず、対応版の公開後に更新が必要です。
