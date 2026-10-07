@@ -20,7 +20,7 @@ npm run dev
 1. Clerk Dashboardでアプリを作成し、サインイン方法（メールなど）を有効にします。`.env.local` の `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` と `CLERK_SECRET_KEY` に取得したキーを設定します。
 2. Clerk DashboardのIntegrationsからConvex連携を有効化します。JWTテンプレートを使う構成では、Convex用テンプレートの名前を `convex`、audienceを `convex` にします。公開プロフィール用に `name: {{user.full_name}}`、`preferred_username: {{user.username}}`、`picture: {{user.image_url}}` のclaimを設定します。ユーザー名・氏名がない場合も同期でき、メールはUserに保存しません。設定の最新手順は [Convex公式Clerk統合ガイド](https://docs.convex.dev/auth/clerk) を参照してください。
 3. ClerkのFrontend API URL（`https://….clerk.accounts.dev` など）をコピーし、Convex Dashboardの開発デプロイメントの環境変数に `CLERK_JWT_ISSUER_DOMAIN` として設定します。`.env.example` にも変数名を記載していますが、**Next.jsの `.env.local` だけに設定してもConvexには反映されません**。
-4. プロジェクトルートで `npx convex dev` を実行してログインし、開発プロジェクトを選択・作成します。初回に環境変数未設定のエラーが出る場合は手順3の設定後に再実行します。CLIが設定する `NEXT_PUBLIC_CONVEX_URL` と `CONVEX_DEPLOYMENT` を `.env.local` に保持します。`users` schema・関数・auth設定が正常に同期されたことを確認します。
+4. プロジェクトルートで `npx convex dev` を実行してログインし、開発プロジェクトを選択・作成します。初回に環境変数未設定のエラーが出る場合は手順3の設定後に再実行します。CLIが設定する `NEXT_PUBLIC_CONVEX_URL` と `CONVEX_DEPLOYMENT` を `.env.local` に保持します。全schema・関数・auth設定が正常に同期されたことを確認します。
 5. `npx convex dev` を起動したまま、別ターミナルで `npm run dev` を実行します。本番ではClerk本番instanceに対応するissuerをConvex本番デプロイメントに設定し、Next.js側にも本番のキーとConvex URLを設定します。開発・本番のissuerを混在させないでください。
 
 `.env.local` などの環境変数ファイルはGitの対象外です。`.env.example` には変数名と用途のみを記載し、秘密値をコミットしないでください。
@@ -32,7 +32,7 @@ npm run dev
 - ClerkProviderの内側にConvexProviderWithClerkを配置し、Convexの認証完了後に `users.upsert` を呼びます。失敗時はエラー表示から再試行できます。
 - Convexは検証済みidentityの `subject` をClerk User IDとして使用します。クライアントからユーザーIDやプロフィール情報を受け取らず、同じidentityは既存Userを更新します。usernameは初回作成後に維持します。
 - usernameはClerk username、表示名、`user` の順でASCII英数字・ハイフンに変換します。衝突時は6文字のランダムsuffixを付けます。Clerk IDとusernameのインデックス検索・挿入を同一mutation内で実行し、並行実行の競合はConvexのトランザクション再試行で解決します。
-- 今回のschemaは `users` のみです。受信箱・設定・公開URLの画面は最小限の骨組みで、質問箱・質問・回答テーブルや公開プロフィールの実装は後続Issueの対象です。
+- User同期時に、所有者ごとのQuestionBoxを1件だけ準備します。初期公開モードは `approval` です。質問・回答・rate limitのschemaと関数も `npx convex dev` で同期してください。
 
 手動確認: 未ログインで `/inbox`・`/settings` にアクセスしてログインへ誘導されること、`/u/test` が表示されることを確認します。Clerkで新規登録・ログイン後、Convex Dashboardの `users` に対応Userが1件だけあることを確認し、再読み込み・再ログインでも増えないことを確認します。ユーザーメニューでログアウトし、認証必須ページへ再アクセスできないことも確認してください。
 
@@ -70,3 +70,13 @@ GitHub Actionsの [CI](.github/workflows/ci.yml) は、Pull Requestと `main` �
 質問はtrim後1〜1000文字に制限し、Reactのテキストとして表示します。初回投稿時にブラウザへランダムな匿名clientIdを保存し、Convexで「同じclientId + 同じ質問箱」ごとに60秒の固定window内3件まで許可します。制限の確認・カウント更新・質問作成は同一transactionです。clientIdをClerkアカウントに紐付けず、questionsへ保存せず、生IPも保存しません。
 
 ブラウザストレージの削除や別clientIdの利用で回避できる最低限のMVP対策です。ストレージが使えない場合はページのセッション内だけIDを保持します。将来はTurnstile等を検討できますが、今回外部サービスは追加しません。rate limit行はbox/client単位で再利用されます。古い匿名IDの行を期限付きで整理する運用は今後の課題です。
+
+## MVPの使い方
+
+ログイン後、ヘッダーの「自分の質問箱」から公開ページへ移動し、「質問箱のURLをコピー」で共有できます。投稿者はログイン不要です。匿名質問はtrim後1〜1000文字、回答は1〜2000文字です。
+
+Settingsで公開・承認制・非公開を選べます。変更は今後の質問の初期公開状態にだけ適用し、既存質問を一括変更しません。Inboxでは自分宛ての質問を未回答・回答済みに分けて確認し、個別に公開・非公開を変更できます。削除には確認があり、対応する回答も削除されます。回答すると、質問と回答が公開されます。公開したくない内容には回答せず、非公開のまま管理してください。回答後でもInboxで非公開に戻せます。
+
+公開ページの「みんなの質問」と回答済みQ&AはConvexのreactive queryで更新します。公開queryはバックエンドで非公開質問を除外し、回答一覧は回答の存在と対応する公開質問を確認します。Inboxは質問の新着順、公開Q&Aは回答の新着順で、いずれもページングします。
+
+スマートフォン表示の検証範囲と実環境での確認手順は [モバイル検証記録](docs/mobile-validation.md)、各Issueのコミットと最終結果は [Night run report](NIGHT_RUN_REPORT.md) を参照してください。
