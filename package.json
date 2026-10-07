@@ -12,7 +12,9 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit && tsc --noEmit -p convex/tsconfig.json",
-    "test": "vitest"
+    "test": "vitest",
+    "test:smoke": "node scripts/browser-smoke.mjs",
+    "smoke:production": "node scripts/production-smoke.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.11",
@@ -23,6 +25,7 @@
     "react-dom": "~19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

@@ -77,7 +77,7 @@ npm run build
 - 320 / 375 / 390 / 430 / 1440pxで全主要画面、実機keyboard、Web Share、QR、長文、empty/loading/errorを確認する。
 - `.next/static`やブラウザresponseにsecret/JWT/stack/internal DB情報がない。エラー本文は固定の利用者向け説明だけ。
 
-詳細な実利用チェックリストは#18で整備する。
+詳細な実利用チェックリストは[acceptance-test.md](acceptance-test.md)を参照する。
 
 ## Troubleshooting
 

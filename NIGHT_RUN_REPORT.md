@@ -1,36 +1,95 @@
 # Release readiness run
 
-実施日: 2026-10-08 / 作業ブランチ: `codex/release-readiness-run`
-開始時working treeはclean。fetch、mainのpull --ff-only後に専用ブランチを作成。
+実施日: 2026-10-08（Asia/Tokyo）
+対象: AliceWonerfulWorld/marshmallow_palody
+作業ブランチ: `codex/release-readiness-run`
 
-## 進捗
+開始時working treeはclean。originをfetch、mainをpull --ff-only後、最新mainから専用ブランチを作成。mainへの直接commit/push、force push、履歴rewriteは実施していない。
 
-- #20: UI共通tokens、ボタン・フォーム・カード・状態表示、トップCTA、Auth周辺、Inbox操作を整理。backend/schema/認証の変更なし。
-- #19 / #17 / #18: 順番に着手予定。
+## 完了Issue
 
-## #20検証
+指定順の #20 → #19 → #17 → #18 を独立commitで実装。対象外Issueへの拡張なし。
 
-lint / typecheck / 9 files・31 tests / webpack production build成功。
-通常 `npm run build` はTurbopackのport bindingが実行環境に拒否され失敗（既存の環境制限）。
-`git diff --check`成功。非公開除外・所有者認可・匿名保存の既存テスト成功。secret値を読み出し・追加していない。追跡envは.env.exampleのみ。
+| Issue | 内容 | commit SHA |
+| --- | --- | --- |
+| #20 | mobile-first UI、共通tokens・ボタン・フォーム・カード・状態表示、トップCTA、Auth周辺 | `ad4898f` |
+| #19 | URLコピー、Web Share/fallback、QRカード、受信箱の初回ガイド、公開範囲の説明 | `3be6958` |
+| #17 | 本番手順・環境変数、標準webpack production build、安全なroot error表示 | `747e786` |
+| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | このIssueの独立commit後に確定SHAを追記 |
 
-UI: 320 / 375 / 390 / 430 / 1440pxを想定してCSS構造を検査。今回DOMブラウザ接続なしのため目視未実施。詳細はdocs/mobile-validation.md。
+未完了Issue（コード・ドキュメント）: なし。
+実Clerk/Convex接続・Production deploy・本番GET検査は人間の残作業。外部設定が完了した実利用確認を代替するものではない。
 
-## #19
+## 実装概要
 
-共有導線: ヘッダーの既存リンク + 受信箱のOwnerGuide（3ステップ、質問箱リンク、共有操作）。
-QR実装: qrcode.react 4.2.0（追加runtime依存1件、外部画像サービスなし）、SVG 240px・4 modulesの余白・白黒・M訂正。カード表示、閉じる/Escapeとfocus復帰。
-URL: window.location.origin + encoded username、URLテキストを常時表示。Web Share非対応/失敗時copy fallback、キャンセルは状態を通知。
-#20 commit: `ad4898f`（push/Issueコメント済み）。
+- neutral base + 紫accent。CSS tokensを中心に既存Tailwindを維持し、巨大UI依存を追加せず本文と余白を整理。primary/secondary/danger、focus、16px入力、44px操作、reduced-motionを統一。
+- 公開プロフィール→投稿→公開未回答→Q&Aの構造を維持。Inboxのfilter/危険操作、Settingsの選択、Auth周辺、loading/empty/errorを改善。
+- 共有は`window.location.origin + /u/ + encodeURIComponent(username)`。localhost固定なし。qrcode.react 4.2.0のSVG 240px、4 modules余白、白黒/M訂正でローカル生成。URLとコピーを残し、閉じる/Escapeでfocus復帰。Web Share非対応/失敗はCopy、キャンセルも通知。
+- 既存Headerリンクに加えて受信箱のOwnerGuideから自分の質問箱へ移動できる。参加者側にも匿名性と公開される場合を説明。
+- backend schema・認証・query/mutation挙動は変更なし。検証中に生成API型のhelper module参照と並び順の差分を検出し、公開APIの変化がないことをレビューして取り込んだ。
 
-#19検証: lint/typecheck/10 files・37 tests/webpack production build成功。通常buildはsandbox外でも同じport制限。非localhost originでURL/QR/Shareをテスト。セキュリティの既存backendテストも全成功、backend変更なし。
+## 最終品質チェック
 
-## #17
+- `npm ci`: #17で成功（lockfile再インストール）。#18のPlaywright追加はnpm installでlockfile更新。
+- `npm run lint`: 成功。
+- `npm run typecheck`: 成功。Nextルート型生成、アプリ/Convexのstrict検査。
+- `npm test -- --run`: 成功、15 files / 58 tests。
+- `npm run build`: 成功。Next公式bundled webpackを標準に使用。
+- `npm run test:smoke`: 成功、キーなしproduction build + 代表fixture生成 + Playwright 10 tests。
+- `git diff --check`: 成功。
+- production smoke: 実本番origin未確定のため未実施。GET `/`・`/sign-in`だけを行うコマンドと8件のローカル自動検証を用意。
 
-変更: docs/deployment.md、README、.env.example、package.jsonの標準webpack build、root provider障害用の固定文言global-error。
-本番構成: Browser → Vercel Next.js + Clerk Production → Convex Production。Clerk Productionには所有ドメイン/DNS準備が必要（*.vercel.appのみでは不可）。DNS・購入・契約は行っていない。
-必要変数: Vercel ProductionのNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY / CLERK_SECRET_KEY / NEXT_PUBLIC_CONVEX_URL、Convex ProductionのCLERK_JWT_ISSUER_DOMAIN。CONVEX_DEPLOY_KEYは任意の自動backend deploy専用。CONVEX_DEPLOYMENTはローカル専用。
-手動作業: Clerk Production認証・ドメイン・証明書・Convex連携とclaims、Convex Production issuer/backend同期、Vercel環境変数と本番domain/deploy、実接続検査。詳細はdocs/deployment.md。
-検証: npm ci / lint / typecheck / 37 tests / npm run buildすべて成功。Next標準のwebpackを使用しTurbopack環境制限を回避。localhostの固定共有URLなし。secretを取得/生成/コミットせず、公開queryと認可の既存テスト成功。
-依存警告: npm auditでlint専用のbraces → micromatch → fast-glob → @next/eslint-plugin-next → eslint-config-nextにhigh 5件（既存）。force fixやNext14へのdowngradeは行っていない。
-#19 commit: `3be6958`（push/Issueコメント済み）。
+初期のTurbopack buildはローカルport binding制限で失敗し、sandbox外でも同じ原因だった。#17でサポート済みwebpack方式を標準コマンドにしたため、現在の`npm run build`は成功する。
+
+## UI確認
+
+320 / 375 / 390 / 430 / 1440pxで以下をChromium自動検査:
+
+- 実Next server: `/`、sign-in/upの設定不足表示、公開質問箱の設定不足表示、inbox/settingsの保護、HTTP 404。
+- 実Reactコンポーネント + テスト用Clerk/Convex doubles + 実production CSS: 本文あり公開箱・QR・Q&A、回答フォーム/削除確認を開いたInbox、Settings、empty/loading/error、所有者Header。
+- 横スクロールなし、textarea 16px以上、ボタン44px以上。トップCTAのkeyboard focusを確認。
+- 375pxと1440pxの公開箱・Inbox・Settingsのスクリーンショットを生成し、6枚を目視レビュー。画像はGit対象外`test-results/browser/`へ生成。再現方法はdocs/acceptance-test.md。
+
+実Clerk標準UI・実機keyboard・カメラ読み取り・ネイティブWeb Share・実Convex realtime transportは未実施。詳細は[mobile-validation](docs/mobile-validation.md)。
+
+## セキュリティ・匿名性
+
+- private Question/Answerを公開queryから除外するテスト成功。
+- 登録・同期→匿名投稿→Inbox分離→公開管理→回答→非公開→削除を3モードで通して検証。
+- ログイン中の投稿でもQuestionに投稿者のClerk ID/name/username/email/IP/clientIdがないことを、許可フィールドの完全一致で検証。公開Question/Answer payloadにも投稿者情報なし。
+- 認可は検証済みidentityと所有者判定。別所有者の回答等を拒否。client supplied userIdへ依存しない。
+- HTML風の投稿はReactテキストとして描画。dangerouslySetInnerHTMLなし。
+- page/root error、回答失敗で内部error/stack/digestを描画しないテスト成功。
+- `.env.local`は追跡なし。追跡envは`.env.example`のみ。secret取得/推測/生成を行っていない。
+- 公開bundleでsk_live/sk_test/Convex deploy keyのmarkerは0件。Clerk SDKには`CLERK_SECRET_KEY`という変数名の診断文字列があるが、値の埋め込みではない。実本番キー設定後にも公開response/bundleを人間が確認する。
+
+## 必要な環境変数
+
+| 設定先 | 変数 |
+| --- | --- |
+| Vercel Production | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `NEXT_PUBLIC_CONVEX_URL` |
+| Convex Production | `CLERK_JWT_ISSUER_DOMAIN` |
+| 任意のVercel自動backend deploy | `CONVEX_DEPLOY_KEY`（secret、Production scopeのみ） |
+| ローカル開発のみ | `CONVEX_DEPLOYMENT` |
+
+## 人間が行う残作業
+
+1. PRをレビューする。自動mergeはしていない。
+2. Clerk: Production instance、所有ドメイン/DNS/証明書、認証方法、Production keys、Convex integration、JWT claims/audience、origin/pathsを設定する。**Clerk Productionは*.vercel.appだけでは構成できない**。既存の所有ドメインがなければ本番公開前に人間が準備する（購入・DNS変更・課金は今回未実施）。
+3. Convex: 正しいteam/projectのProductionへClerk Production issuerを設定し、レビュー済みコードでschema/functions/auth/生成APIをdeployする。開発・本番issuerを混ぜない。
+4. Vercel: repository/Next.js/Node22/main、Production scopeの3変数、Clerkと整合する本番domainを設定してdeployする。Previewに本番キー/DBを流用しない。
+5. 実originで`npm run smoke:production -- https://<production-domain>`を実行し、[約10分のacceptance checklist](docs/acceptance-test.md)を完了してから部会へ配布する。
+
+具体的なDashboard順序・コマンド・切り分けは[deployment.md](docs/deployment.md)。本番Dashboardの変更、課金、本番データ削除、DNS変更、不明projectへのdeployは実施していない。
+
+## 既知の制限
+
+- 外部実認証・本番deploy未実施。ブラウザ代表fixtureは接続E2Eではない。
+- production GET smokeは200–399の到達確認だけ。3xxの転送先・認証成功は手動で確認する。
+- test:smokeは`.next`をキーなしで再buildするため、通常接続へ戻すには通常build/devを再実行する。
+- 匿名browser IDの削除/変更でrate limitは回避可能。期限切れlimit行の整理、公開Q&Aページの非公開除外による件数減少は既存MVPの制限。
+- npm auditのhigh 5件は既存lint間接依存のbraces → micromatch → fast-glob → @next/eslint-plugin-next → eslint-config-next。破壊的force fix/Next14へのdowngradeは行っていない。修正版への更新は別途必要。
+
+## Pull Request
+
+#18のcommit/push後にmain向け1本を作成し、URLを追記する。

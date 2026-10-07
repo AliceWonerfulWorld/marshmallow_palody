@@ -9,6 +9,6 @@ export default defineConfig({
     environment: "jsdom",
     environmentOptions: { jsdom: { url: "https://questions.example" } },
     setupFiles: ["./src/test/setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}", "convex/**/*.test.ts"],
+    include: ["src/**/*.test.{ts,tsx}", "convex/**/*.test.ts", "scripts/**/*.test.ts"],
   },
 });

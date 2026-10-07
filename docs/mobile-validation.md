@@ -40,3 +40,19 @@ READMEに従いClerk/Convexの開発環境を設定した後、ブラウザのRe
 ## 共有UI（#19）
 
 同じ5 viewport想定で、URLのbreak-all、共有操作のflex-wrap、240px QRのmax-width:100%を構造レビュー。QRはモーダルではなく画面内カードのため、focus trapは不要。開くと閉じるへfocus、閉じる/Escapeでトリガーへfocusを戻す。URL・コピーも常に利用可能。コピー/共有の成功・失敗・非対応・キャンセル、QRへ渡すURLとfocus復帰は自動テストで確認。ブラウザ目視・カメラ読み取り・実Web Shareは環境設定後の手動確認事項。
+
+## 最終受け入れ検査（#18）
+
+#20/#19時点で接続できなかったブラウザ検査を、隔離Playwright Chromiumのキーなしproduction serverと代表markupで補完した。
+
+| viewport | 実Next serverのトップ・Auth設定不足・公開箱設定不足・保護ルート・404 | 実コンポーネントの公開箱/QR/Q&A・Inbox・Settings・empty/loading/error |
+| --- | --- | --- |
+| 320px | 自動smoke成功、横スクロールなし | 実production CSSで成功、横スクロールなし |
+| 375px | 同上 | 同上 |
+| 390px | 同上 | 同上 |
+| 430px | 同上 | 同上 |
+| 1440px | 同上 | 同上 |
+
+本文ありの代表状態は実Reactコンポーネントをテスト用Convex/Clerk doublesで描画し、生成したmarkupに実production CSSを適用。長い表示名・本文・URL、公開質問とQ&A、QRを開いたカード、回答フォームと削除確認を開いたInbox、公開モード選択、loading/empty/errorを確認した。textarea 16px以上、ボタン44px以上を自動検証。トップCTAのfocus-visibleも実ブラウザで検証。375px/1440pxの公開箱・Inbox・Settingsは画像を生成して目視確認した。
+
+再現: `npx playwright install chromium` → `npm run test:smoke`。画像はGit対象外の`test-results/browser/`に生成される。実Clerk標準UI、実認証/Convex transport、実機keyboard、カメラ読み取り、ネイティブWeb Shareは代表markupでは検証できないため、[受け入れチェックリスト](acceptance-test.md)で人間が確認する。

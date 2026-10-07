@@ -10,8 +10,10 @@
 
 import type * as answers from "../answers.js";
 import type * as boxes from "../boxes.js";
-import type * as questions from "../questions.js";
+import type * as lib_access from "../lib/access.js";
+import type * as lib_content from "../lib/content.js";
 import type * as profiles from "../profiles.js";
+import type * as questions from "../questions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -21,11 +23,13 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  users: typeof users;
+  answers: typeof answers;
+  boxes: typeof boxes;
+  "lib/access": typeof lib_access;
+  "lib/content": typeof lib_content;
   profiles: typeof profiles;
   questions: typeof questions;
-  boxes: typeof boxes;
-  answers: typeof answers;
+  users: typeof users;
 }>;
 
 /**

@@ -90,3 +90,15 @@ Settingsで公開・承認制・非公開を選べます。変更は今後の質
 共有URLは閲覧中のoriginから生成します。開発環境で共有したQRは開発環境を指すため、部会では本番URLを開いて共有してください。Web Share非対応・失敗時はコピーへ切り替え、コピーも利用できない場合は表示URLを手動で選択できます。
 
 本番公開の前提・環境変数・Dashboard手順は [デプロイ手順](docs/deployment.md) を参照してください。Clerk Productionには所有ドメインの設定が必要です。
+
+## 部会前の受け入れ検査
+
+[約10分のチェックリスト](docs/acceptance-test.md)で登録・共有・匿名投稿・Inbox・公開モード・回答・匿名性・スマホを確認します。
+
+```bash
+npx playwright install chromium
+npm run test:smoke
+npm run smoke:production -- https://your-production-domain
+```
+
+ブラウザsmokeは明示的にキーなしでproduction buildし、外部DBへ接続しません（実サービス接続へ戻すときは通常build/devを再実行）。本番smokeはGET `/` と `/sign-in`だけを確認し、投稿・削除はしません。
