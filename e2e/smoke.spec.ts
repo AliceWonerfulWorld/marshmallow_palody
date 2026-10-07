@@ -50,6 +50,23 @@ for (const width of [320, 375, 390, 430, 1440]) {
       for (const button of await page.getByRole("button").all()) {
         expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
       }
+      if (name === "inbox") {
+        const activeFilter = page.locator('button[aria-pressed="true"]');
+        await activeFilter.hover();
+        const contrast = await activeFilter.evaluate(async node => {
+          await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+          await Promise.all(node.getAnimations().map(animation => animation.finished));
+          const luminance = (color: string) => {
+            const channels = color.match(/[\d.]+/g)!.slice(0, 3).map(Number).map(value => value / 255).map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+            return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722;
+          };
+          const style = getComputedStyle(node);
+          const foreground = luminance(style.color);
+          const background = luminance(style.backgroundColor);
+          return (Math.max(foreground, background) + .05) / (Math.min(foreground, background) + .05);
+        });
+        expect(contrast).toBeGreaterThanOrEqual(4.5);
+      }
       if ((width === 375 || width === 1440) && ["public", "inbox", "settings"].includes(name)) {
         await page.screenshot({ path: testInfo.outputPath(`${name}-${width}.png`), fullPage: true });
       }

@@ -26,6 +26,7 @@
 - 公開プロフィール→投稿→公開未回答→Q&Aの構造を維持。Inboxのfilter/危険操作、Settingsの選択、Auth周辺、loading/empty/errorを改善。
 - 共有は`window.location.origin + /u/ + encodeURIComponent(username)`。localhost固定なし。qrcode.react 4.2.0のSVG 240px、4 modules余白、白黒/M訂正でローカル生成。URLとコピーを残し、閉じる/Escapeでfocus復帰。Web Share非対応/失敗はCopy、キャンセルも通知。
 - 既存Headerリンクに加えて受信箱のOwnerGuideから自分の質問箱へ移動できる。参加者側にも匿名性と公開される場合を説明。
+- 最終CSSレビューで選択済みInbox filterのhoverが淡色へ戻り白文字のcontrastを落とす問題を修正。#18の最小限UI修正としてhoverの背景/文字色をbrowser testへ追加。
 - backend schema・認証・query/mutation挙動は変更なし。検証中に生成API型のhelper module参照と並び順の差分を検出し、公開APIの変化がないことをレビューして取り込んだ。
 
 ## 最終品質チェック
@@ -37,6 +38,7 @@
 - `npm run build`: 成功。Next公式bundled webpackを標準に使用。
 - `npm run test:smoke`: 成功、キーなしproduction build + 代表fixture生成 + Playwright 10 tests。
 - `git diff --check`: 成功。
+- [GitHub CI](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37664347867): `0a364c5`のnpm ci / lint / typecheck / 58 tests / build / browser smokeまで全step成功。最終hover修正もローカルで同じ検査を再実行。
 - production smoke: 実本番origin未確定のため未実施。GET `/`・`/sign-in`だけを行うコマンドと8件のローカル自動検証を用意。
 
 初期のTurbopack buildはローカルport binding制限で失敗し、sandbox外でも同じ原因だった。#17でサポート済みwebpack方式を標準コマンドにしたため、現在の`npm run build`は成功する。

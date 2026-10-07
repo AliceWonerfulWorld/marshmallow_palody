@@ -13,7 +13,7 @@ button { cursor: pointer; }
 button:not([class*="cl-"]), .button { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; min-width: 44px; padding: .625rem 1rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--surface); font-weight: 600; line-height: 1.5; text-decoration: none; transition: background-color 150ms; }
 button:not([class*="cl-"]):hover, .button:hover { background: #f0ecf6; }
 button[type="submit"]:not([class*="cl-"]), .button-primary, button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: white; }
-button[type="submit"]:not([class*="cl-"]):hover, .button-primary:hover { background: #533586; }
+button[type="submit"]:not([class*="cl-"]):hover, .button-primary:hover, button[aria-pressed="true"]:hover { background: #533586; }
 button.danger { color: #a12b3b; border-color: #e7bdc3; }
 header a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 .cl-userButtonTrigger { min-width: 44px; min-height: 44px; }
