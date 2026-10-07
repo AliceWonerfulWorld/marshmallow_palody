@@ -33,3 +33,5 @@ button:disabled { cursor: not-allowed; opacity: .6; }
 .answer { border-left: 3px solid #b8a4d9; padding-left: 1rem; }
 @media (min-width: 640px) { .card { padding: 1.5rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+.qr-card { padding: 1rem; border-radius: var(--radius); background: white; border: 1px solid var(--line); }

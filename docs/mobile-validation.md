@@ -36,3 +36,7 @@ READMEに従いClerk/Convexの開発環境を設定した後、ブラウザのRe
 320 / 375 / 390 / 430 / 1440pxを想定し、全主要画面のCSSとコンポーネント構造をレビューした。共通の最大幅・min-width:0・長文折り返し、16px入力、44px操作、折り返すボタン列、画面内の削除確認、Clerkカードのmax-widthを維持。回答フォームの操作列も折り返すよう修正した。focus-visible、label、文字によるstatus、reduced-motion対応を確認。loading / empty / errorにも共通の余白・背景を適用。
 
 今回のブラウザ接続にはDOM操作対応のbrowser surfaceがなく、指定viewportの新デザインのブラウザ目視確認は未実施。前回#15の確認結果は今回の目視結果ではない。実Clerk画面を含め、設定後に上記viewportで再確認すること。
+
+## 共有UI（#19）
+
+同じ5 viewport想定で、URLのbreak-all、共有操作のflex-wrap、240px QRのmax-width:100%を構造レビュー。QRはモーダルではなく画面内カードのため、focus trapは不要。開くと閉じるへfocus、閉じる/Escapeでトリガーへfocusを戻す。URL・コピーも常に利用可能。コピー/共有の成功・失敗・非対応・キャンセル、QRへ渡すURLとfocus復帰は自動テストで確認。ブラウザ目視・カメラ読み取り・実Web Shareは環境設定後の手動確認事項。

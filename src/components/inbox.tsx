@@ -1,4 +1,5 @@
 "use client";
+import { OwnerGuide } from "./owner-guide";
 import { AnswerForm } from "./answer-form";
 import { useState } from "react";
 import { useConvexAuth, useMutation, usePaginatedQuery, useQuery } from "convex/react";
@@ -12,6 +13,7 @@ export function Inbox() {
   const { results, status, loadMore } = usePaginatedQuery(api.questions.inbox, user ? { status: filter } : "skip", { initialNumItems: 20 });
   return <main className="space-y-4 p-4 sm:p-6">
     <h1 className="text-2xl font-bold">受信箱</h1><p className="metadata">届いた言葉に、あなたのペースで回答しましょう。</p>
+    {user && <OwnerGuide username={user.username} />}
     <div className="flex flex-wrap gap-3" aria-label="質問の絞り込み">
       <button aria-pressed={filter === "unanswered"} onClick={() => setFilter("unanswered")}>未回答</button>
       <button aria-pressed={filter === "answered"} onClick={() => setFilter("answered")}>回答済み</button>

@@ -28,6 +28,7 @@ export function QuestionComposer({ boxId }: { boxId: Id<"questionBoxes"> }) {
   return <form onSubmit={submit} className="card space-y-3">
     <h2 className="text-xl font-bold">匿名で質問する</h2>
     <p className="metadata">ログイン不要です。投稿者のアカウント情報は保存しません。</p>
+    <p className="metadata">公開モードでは未回答の質問も表示されます。承認制・非公開でも、所有者が公開した質問や回答はみんなに表示されます。個人情報の入力は避けてください。</p>
     <label htmlFor="question-content">質問内容</label>
     <textarea id="question-content" aria-describedby="question-length" className="block w-full" rows={5} value={content} disabled={pending} onChange={event => setContent(event.target.value)} />
     <p className="metadata" id="question-length">{length} / 1000文字</p>
