@@ -64,3 +64,9 @@ GitHub Actionsの [CI](.github/workflows/ci.yml) は、Pull Requestと `main` �
 実行環境のポート制限によりTurbopackの本番ビルドが失敗する場合は、`npm run build -- --webpack` でビルドできます。
 
 初期環境の依存関係では、Next.js公式ESLint設定のプラグインが対応するESLint 9を使用しています。インストール時にESLint 9のサポート終了警告と、lint用の間接依存 `braces` に由来する脆弱性警告が出ます。2026年10月8日の確認時点で `braces` の修正版は公開されておらず、対応版の公開後に更新が必要です。
+
+## 匿名投稿の荒らし対策
+
+質問はtrim後1〜1000文字に制限し、Reactのテキストとして表示します。初回投稿時にブラウザへランダムな匿名clientIdを保存し、Convexで「同じclientId + 同じ質問箱」ごとに60秒の固定window内3件まで許可します。制限の確認・カウント更新・質問作成は同一transactionです。clientIdをClerkアカウントに紐付けず、questionsへ保存せず、生IPも保存しません。
+
+ブラウザストレージの削除や別clientIdの利用で回避できる最低限のMVP対策です。ストレージが使えない場合はページのセッション内だけIDを保持します。将来はTurnstile等を検討できますが、今回外部サービスは追加しません。rate limit行はbox/client単位で再利用されます。古い匿名IDの行を期限付きで整理する運用は今後の課題です。

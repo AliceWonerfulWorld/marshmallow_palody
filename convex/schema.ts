@@ -25,6 +25,9 @@ export default defineSchema({
     visibility, status: questionStatus, createdAt: v.number(), updatedAt: v.number(),
   }).index("by_receiver_status_created", ["receiverUserId", "status", "createdAt"])
     .index("by_box_visibility_status_created", ["boxId", "visibility", "status", "createdAt"]),
+  questionRateLimits: defineTable({
+    boxId: v.id("questionBoxes"), clientId: v.string(), windowStartedAt: v.number(), count: v.number(),
+  }).index("by_box_client", ["boxId", "clientId"]),
   answers: defineTable({
     questionId: v.id("questions"), authorUserId: v.id("users"), content: v.string(),
     createdAt: v.number(), updatedAt: v.number(),

@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, type FormEvent } from "react";
+import { getAnonymousClientId } from "@/lib/anonymous-client";
 import { useRouter } from "next/navigation";
 import type { Id } from "../../convex/_generated/dataModel";
 import { submitQuestion } from "@/app/u/[username]/actions";
@@ -18,7 +19,7 @@ export function QuestionComposer({ boxId }: { boxId: Id<"questionBoxes"> }) {
     setPending(true);
     setMessage("");
     try {
-      const result = await submitQuestion(boxId, content);
+      const result = await submitQuestion(boxId, content, getAnonymousClientId());
       if (result.ok) { setContent(""); setMessage("質問を送りました"); router.refresh(); }
       else setMessage(result.message);
     } catch { setMessage("送信できませんでした。時間をおいて再試行してください。"); }
