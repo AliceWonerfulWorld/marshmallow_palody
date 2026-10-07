@@ -4,3 +4,12 @@ body {
   margin: 0;
   font-family: Arial, "Noto Sans JP", sans-serif;
 }
+
+body { background: #fafaf9; color: #1c1917; overflow-wrap: anywhere; }
+main { width: 100%; max-width: 48rem; margin: 0 auto; }
+header { max-width: 72rem; margin: 0 auto; }
+input, textarea, select { max-width: 100%; border: 1px solid #a8a29e; border-radius: .5rem; padding: .6rem; background: white; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; opacity: .6; }
+:focus-visible { outline: 2px solid #57534e; outline-offset: 3px; }
+.card { padding: 1.25rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: white; }
