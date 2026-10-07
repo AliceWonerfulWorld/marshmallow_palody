@@ -60,7 +60,9 @@
 
 ## Pull Request
 
-PR作成処理中。作成後、この項目をURLで更新する。main向け1件、指定タイトル、全指定IssueのCloses行を記載し、自動mergeはしない。
+[PR #16: MVP: implement anonymous shared question box](https://github.com/AliceWonerfulWorld/marshmallow_palody/pull/16)
+
+main向け1件を作成済み。全指定IssueのCloses行を記載。自動mergeは行っていない。
 
 ## GitHub操作
 
