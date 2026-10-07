@@ -1,4 +1,5 @@
 import { ConvexError } from "convex/values";
+import { ensureBox } from "./lib/access";
 import { mutation, query } from "./_generated/server";
 
 function slug(value: string | undefined) {
@@ -27,6 +28,7 @@ export const upsert = mutation({
       if (existing.displayName !== displayName || existing.imageUrl !== imageUrl) {
         await ctx.db.patch(existing._id, { displayName, imageUrl, updatedAt: Date.now() });
       }
+      await ensureBox(ctx, existing._id);
       return existing._id;
     }
 
@@ -38,10 +40,12 @@ export const upsert = mutation({
         .withIndex("by_username", (q) => q.eq("username", username)).unique();
       if (!taken) {
         const now = Date.now();
-        return await ctx.db.insert("users", {
+        const id = await ctx.db.insert("users", {
           clerkUserId: identity.subject, username, displayName, imageUrl,
           createdAt: now, updatedAt: now,
         });
+        await ensureBox(ctx, id);
+        return id;
       }
       username = `${base}-${Math.floor(Math.random() * 36 ** 6).toString(36).padStart(6, "0")}`;
     }
