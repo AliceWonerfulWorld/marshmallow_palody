@@ -15,7 +15,7 @@
 | #20 | mobile-first UI、共通tokens・ボタン・フォーム・カード・状態表示、トップCTA、Auth周辺 | `ad4898f` |
 | #19 | URLコピー、Web Share/fallback、QRカード、受信箱の初回ガイド、公開範囲の説明 | `3be6958` |
 | #17 | 本番手順・環境変数、標準webpack production build、安全なroot error表示 | `747e786` |
-| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | `726417f`（受け入れ整備） / `fd1aab3`（hover contrast修正） |
+| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | `726417f`（受け入れ整備） / `fd1aab3`（hover contrast修正） / `225fdd6`（CI環境調整） |
 
 未完了Issue（コード・ドキュメント）: なし。
 実Clerk/Convex接続・Production deploy・本番GET検査は人間の残作業。外部設定が完了した実利用確認を代替するものではない。
@@ -39,7 +39,8 @@
 - `npm run test:smoke`: 成功、キーなしproduction build + 代表fixture生成 + Playwright 10 tests。
 - `git diff --check`: 成功。
 - 最新headのCI初回はUbuntu aptミラー低速（32.5MB/13分37秒）で15分job上限に達し、browser install中にtimeout。npm ci/lint/typecheck/test/buildは成功済み。全検査を維持したままCIをUbuntu 24.04へ固定し、job上限を20分へ調整して再検証。経緯はPRコメントに記録。
-- [GitHub CI](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37664347867): `0a364c5`のnpm ci / lint / typecheck / 58 tests / build / browser smokeまで全step成功。最終hover修正もローカルで同じ検査を再実行。
+- [最終実装のGitHub CI](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37668087119): `225fdd6`でnpm ci / lint / typecheck / 58 tests / build / 10 browser smokeまで全step成功（2分4秒）。
+- aptミラー低速でtimeoutした`a6505ae`も、[同一commitの再実行](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37665018572)で全成功（4分24秒）。テストを省略せず原因調査・再検証した。
 - production smoke: 実本番origin未確定のため未実施。GET `/`・`/sign-in`だけを行うコマンドと8件のローカル自動検証を用意。
 
 初期のTurbopack buildはローカルport binding制限で失敗し、sandbox外でも同じ原因だった。#17でサポート済みwebpack方式を標準コマンドにしたため、現在の`npm run build`は成功する。
