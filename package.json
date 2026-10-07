@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "next typegen && tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit && tsc --noEmit -p convex/tsconfig.json",
     "test": "vitest"
   },
   "dependencies": {
@@ -29,6 +29,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "convex-test": "^0.0.60",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.4.0",
     "jsdom": "^27.0.0",
