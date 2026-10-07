@@ -51,3 +51,14 @@ export const remove = mutation({
     await ctx.db.delete(questionId);
   },
 });
+
+export const publicUnanswered = query({
+  args: { boxId: v.id("questionBoxes"), paginationOpts: paginationOptsValidator },
+  handler: async (ctx, { boxId, paginationOpts }) => {
+    if (!await ctx.db.get(boxId)) return { page: [], isDone: true, continueCursor: "" };
+    const result = await ctx.db.query("questions")
+      .withIndex("by_box_visibility_status_created", q => q.eq("boxId", boxId).eq("visibility", "public").eq("status", "unanswered"))
+      .order("desc").paginate(paginationOpts);
+    return { ...result, page: result.page.map(question => ({ id: question._id, content: question.content, createdAt: question.createdAt, status: question.status })) };
+  },
+});

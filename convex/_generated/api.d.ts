@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as boxes from "../boxes.js";
 import type * as questions from "../questions.js";
 import type * as profiles from "../profiles.js";
 import type * as users from "../users.js";
@@ -22,6 +23,7 @@ declare const fullApi: ApiFromModules<{
   users: typeof users;
   profiles: typeof profiles;
   questions: typeof questions;
+  boxes: typeof boxes;
 }>;
 
 /**

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AuthProvider } from "@/components/auth-provider";
+import { PublicDataProvider } from "@/components/public-data-provider";
 import { Header } from "@/components/header";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up" signInFallbackRedirectUrl="/inbox" signUpFallbackRedirectUrl="/inbox">
           {url ? <AuthProvider url={url}>{content}</AuthProvider> : content}
         </ClerkProvider>
-      ) : content}</body>
+      ) : url ? <PublicDataProvider url={url}>{content}</PublicDataProvider> : content}</body>
     </html>
   );
 }

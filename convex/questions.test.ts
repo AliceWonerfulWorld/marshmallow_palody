@@ -76,3 +76,32 @@ it("60秒に3件まで、別ブラウザ・別箱の独立性とwindowの更新"
     expect(limit).toMatchObject({ count: 1, windowStartedAt: 160_000 });
   } finally { clock.mockRestore(); }
 });
+
+it("公開queryは公開・未回答だけを返し、モード変更は既存質問を変更しない", async () => {
+  const t = convexTest(schema, modules);
+  const owner = t.withIdentity({ subject: "owner" });
+  const other = t.withIdentity({ subject: "other" });
+  await owner.mutation(api.users.upsert, {});
+  await other.mutation(api.users.upsert, {});
+  const box = await owner.query(api.boxes.current, {});
+  if (!box) throw new Error("fixture missing");
+  const post = { boxId: box._id, clientId: "anonymous-client-001", content: "private secret" };
+  const list = () => t.query(api.questions.publicUnanswered, { boxId: box._id, paginationOpts: { numItems: 20, cursor: null } });
+  await t.mutation(api.questions.submit, post);
+  expect((await list()).page).toHaveLength(0);
+  const question = await t.run(ctx => ctx.db.query("questions").unique());
+  if (!question) throw new Error("fixture missing");
+  await owner.mutation(api.questions.setVisibility, { questionId: question._id, visibility: "public" });
+  expect((await list()).page.map(row => row.content)).toEqual(["private secret"]);
+  expect((await list()).page[0]).not.toHaveProperty("receiverUserId");
+  await owner.mutation(api.questions.setVisibility, { questionId: question._id, visibility: "private" });
+  expect(JSON.stringify(await list())).not.toContain("private secret");
+  await expect(other.mutation(api.boxes.setMode, { boxId: box._id, visibilityMode: "public" })).rejects.toThrow("NOT_FOUND");
+  await owner.mutation(api.boxes.setMode, { boxId: box._id, visibilityMode: "public" });
+  expect((await t.run(ctx => ctx.db.get(question._id)))?.visibility).toBe("private");
+  await t.mutation(api.questions.submit, { ...post, content: "public new" });
+  expect((await list()).page.map(row => row.content)).toEqual(["public new"]);
+  await owner.mutation(api.boxes.setMode, { boxId: box._id, visibilityMode: "private" });
+  await t.mutation(api.questions.submit, { ...post, content: "private new" });
+  expect((await list()).page.map(row => row.content)).toEqual(["public new"]);
+});
