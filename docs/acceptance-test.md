@@ -70,7 +70,7 @@ npm run test:smoke
 - Vitest/convex-test: 3モードの通しシナリオ、User重複防止、匿名保存、所有者認可、private除外、回答の原子的状態遷移、削除、validation/rate limit、XSS描画、共有fallback/focus、公開ページ・404・設定不足・安全なerrorを検証。
 - Playwright: 秘密値を空にしたproduction build + ローカルNext server。`/`・sign-in/up・質問箱の設定不足表示・inbox/settingsの保護・HTTP 404を5 viewportで検証。横スクロール、CTA 44px、keyboard focusも確認。さらに実Reactコンポーネントの代表markup + 実production CSSで、本文あり公開箱/QR/Q&A・回答/削除を開いたInbox・Settings・loading/empty/error、16px入力・44pxボタンを5 viewportで検査。Clerk/Convexへの外部リクエストを許可しない。
 - `test:smoke`は`.next`をkeyless設定で再buildする。実サービスのローカル接続へ戻る場合は通常のbuild/devを再実行する。既存serverの再利用を禁止し、別プロファイルのChromiumを使用する。
-- CIは同じテストを秘密値なしで実行する。Playwrightが起動できない環境では、理由を記録してCI結果と手動viewport確認で補う。skipやassertion弱体化はしない。
+- CIはUbuntu 24.04に固定し、同じテストを秘密値なしで実行する。ブラウザ依存のapt取得が低速だった実行ログを踏まえjob上限は20分。Playwrightが起動できない環境では、理由を記録してCI結果と手動viewport確認で補う。skipやassertion弱体化はしない。
 
 Playwrightの[webServer](https://playwright.dev/docs/test-webserver)と[CI設定](https://playwright.dev/docs/ci-intro)に従い、検証用serverの起動とbrowserインストールを構成した。
 

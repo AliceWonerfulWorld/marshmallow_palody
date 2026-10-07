@@ -38,6 +38,7 @@
 - `npm run build`: 成功。Next公式bundled webpackを標準に使用。
 - `npm run test:smoke`: 成功、キーなしproduction build + 代表fixture生成 + Playwright 10 tests。
 - `git diff --check`: 成功。
+- 最新headのCI初回はUbuntu aptミラー低速（32.5MB/13分37秒）で15分job上限に達し、browser install中にtimeout。npm ci/lint/typecheck/test/buildは成功済み。全検査を維持したままCIをUbuntu 24.04へ固定し、job上限を20分へ調整して再検証。経緯はPRコメントに記録。
 - [GitHub CI](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37664347867): `0a364c5`のnpm ci / lint / typecheck / 58 tests / build / browser smokeまで全step成功。最終hover修正もローカルで同じ検査を再実行。
 - production smoke: 実本番origin未確定のため未実施。GET `/`・`/sign-in`だけを行うコマンドと8件のローカル自動検証を用意。
 
