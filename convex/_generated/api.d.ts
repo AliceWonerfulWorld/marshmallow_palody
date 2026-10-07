@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as profiles from "../profiles.js";
 import type * as users from "../users.js";
 
 import type {
@@ -18,6 +19,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   users: typeof users;
+  profiles: typeof profiles;
 }>;
 
 /**
