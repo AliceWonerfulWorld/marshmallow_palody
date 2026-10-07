@@ -33,6 +33,7 @@
 - `npm run typecheck`: 成功（Next.jsルート型生成、アプリ・Convexのstrictチェック）
 - `npm test -- --run`: 成功、9 files / 31 tests
 - `npm run build -- --webpack`: 成功
+- [GitHub Actions CI](https://github.com/AliceWonerfulWorld/marshmallow_palody/actions/runs/37656791996): `6437187` に対してnpm ci / lint / typecheck / test / 通常Turbopack buildすべて成功。ローカルのport制限はCIでは発生しなかった。
 - `npm run build`: TurbopackのPostCSS処理でローカルポート作成が拒否され失敗。sandbox制限外での再試行も同じエラー。READMEに既存の回避手順がある。ソースの型・コンパイルはwebpackで検証済み。
 - Chromeの代表状態: 320 / 375 / 390 / 430 / 768 / 1280pxで横スクロールなし。主要ボタン・ヘッダーリンク44px以上、textarea16px。長文・長いURL・回答フォーム・削除確認を含む。詳細: [mobile-validation](docs/mobile-validation.md)
 - 認可、非公開データ除外、匿名保存、文字数境界、rate limit、XSS描画、重複回答、関連回答削除、送信中ロック・失敗時保持をテスト。
@@ -68,7 +69,7 @@ main向け1件を作成済み。全指定IssueのCloses行を記載。自動merg
 
 - mainへ直接コミット・pushしていない。force push・履歴rewrite・hard resetを使用していない。
 - 全実装コミットをoriginの専用ブランチへ通常push済み。
-- #9・#8・#2・#3・#6・#7・#4・#5・#15へ結果コメント済み。途中のGitHub Internal Server Errorで失敗したpush/コメントは再試行して成功。
+- 全指定Issueへ確認・実装結果をコメント済み。途中のGitHub Internal Server Errorで失敗したpush/コメントは再試行して成功。
 - Issueを手動でcloseしていない（#1・#10・#11は開始時からclosed）。
 
 ## 気になった点 / 技術的負債
