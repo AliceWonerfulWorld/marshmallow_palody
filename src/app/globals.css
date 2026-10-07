@@ -3,13 +3,25 @@
 body {
   margin: 0;
   font-family: Arial, "Noto Sans JP", sans-serif;
+  background: #fafaf9;
+  color: #1c1917;
+  overflow-wrap: anywhere;
 }
 
-body { background: #fafaf9; color: #1c1917; overflow-wrap: anywhere; }
-main { width: 100%; max-width: 48rem; margin: 0 auto; }
+main { min-width: 0; width: 100%; max-width: 48rem; margin: 0 auto; }
 header { max-width: 72rem; margin: 0 auto; }
-input, textarea, select { max-width: 100%; border: 1px solid #a8a29e; border-radius: .5rem; padding: .6rem; background: white; }
+input, textarea, select { max-width: 100%; border: 1px solid #a8a29e; border-radius: .5rem; padding: .6rem; background: white; font-size: 1rem; }
 button { cursor: pointer; }
+button:not([class*="cl-"]) { min-height: 44px; min-width: 44px; padding: .5rem .75rem; border: 1px solid #a8a29e; border-radius: .5rem; background: white; }
+header a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.cl-userButtonTrigger { min-width: 44px; min-height: 44px; }
+textarea { min-height: 10rem; resize: vertical; }
+.auth-page .cl-rootBox, .auth-page .cl-cardBox, .auth-page .cl-card { max-width: 100%; min-width: 0; }
+.auth-page .cl-formFieldInput { font-size: 1rem; }
 button:disabled { cursor: wait; opacity: .6; }
 :focus-visible { outline: 2px solid #57534e; outline-offset: 3px; }
-.card { padding: 1.25rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: white; }
+.card { min-width: 0; padding: 1rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: white; }
+
+.card p { line-height: 1.75; }
+.card fieldset label { min-height: 44px; align-items: center; }
+@media (min-width: 640px) { .card { padding: 1.25rem; } }

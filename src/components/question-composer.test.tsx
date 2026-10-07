@@ -1,0 +1,35 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, expect, it, vi } from "vitest";
+import type { Id } from "../../convex/_generated/dataModel";
+import { QuestionComposer } from "./question-composer";
+const mocks = vi.hoisted(() => ({ submit: vi.fn(), refresh: vi.fn() }));
+vi.mock("@/app/u/[username]/actions", () => ({ submitQuestion: mocks.submit }));
+vi.mock("@/lib/anonymous-client", () => ({ getAnonymousClientId: () => "anonymous-browser-001" }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: mocks.refresh }) }));
+beforeEach(() => { mocks.submit.mockReset(); mocks.refresh.mockReset(); });
+it("空白だけでは送信できず、送信中の再操作を防止し成功時にクリアする", async () => {
+  let finish!: (value: { ok: true }) => void;
+  mocks.submit.mockReturnValue(new Promise(resolve => { finish = resolve; }));
+  render(<QuestionComposer boxId={"box" as Id<"questionBoxes">} />);
+  const input = screen.getByLabelText("質問内容");
+  const button = screen.getByRole("button", { name: "質問を送信" });
+  fireEvent.change(input, { target: { value: "   " } });
+  expect(button).toBeDisabled();
+  fireEvent.change(input, { target: { value: "質問です" } });
+  fireEvent.click(button); fireEvent.submit(input.closest("form")!);
+  expect(mocks.submit).toHaveBeenCalledTimes(1);
+  expect(input).toBeDisabled();
+  finish({ ok: true });
+  await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("質問を送りました"));
+  expect(input).toHaveValue(""); expect(mocks.refresh).toHaveBeenCalledOnce();
+});
+it("失敗時は入力を保ち、ユーザー向けメッセージを表示して再試行できる", async () => {
+  mocks.submit.mockResolvedValue({ ok: false, message: "少し時間をおいてから送信してください" });
+  render(<QuestionComposer boxId={"box" as Id<"questionBoxes">} />);
+  const input = screen.getByLabelText("質問内容");
+  fireEvent.change(input, { target: { value: "消さない質問" } });
+  fireEvent.click(screen.getByRole("button", { name: "質問を送信" }));
+  await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("少し時間をおいてから送信してください"));
+  expect(input).toHaveValue("消さない質問");
+  expect(screen.getByRole("button", { name: "質問を送信" })).toBeEnabled();
+});

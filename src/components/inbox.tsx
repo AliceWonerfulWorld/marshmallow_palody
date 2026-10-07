@@ -37,8 +37,8 @@ function InboxCard({ question }: { question: Doc<"questions"> }) {
   }
   return <article className="card space-y-3">
     <p className="whitespace-pre-wrap">{question.content}</p>
-    <time dateTime={new Date(question.createdAt).toISOString()}>{new Date(question.createdAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })}</time>
-    <p>{question.visibility === "public" ? "公開" : "非公開"} · {question.status === "answered" ? "回答済み" : "未回答"}</p>
+    <time className="text-sm text-stone-600" dateTime={new Date(question.createdAt).toISOString()}>{new Date(question.createdAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })}</time>
+    <p className="text-sm text-stone-600">{question.visibility === "public" ? "公開" : "非公開"} · {question.status === "answered" ? "回答済み" : "未回答"}</p>
     <div className="flex flex-wrap gap-4">
       <button disabled={pending} onClick={() => perform(() => setVisibility({ questionId: question._id, visibility: question.visibility === "public" ? "private" : "public" }))}>{question.visibility === "public" ? "非公開にする" : "公開する"}</button>
       <button disabled={pending} onClick={() => setConfirmDelete(true)}>削除</button>
