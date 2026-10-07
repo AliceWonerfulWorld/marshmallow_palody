@@ -30,3 +30,9 @@
 READMEに従いClerk/Convexの開発環境を設定した後、ブラウザのResponsive Design Modeで上記の幅を指定する。自分の質問箱へ匿名投稿し、Inboxで公開切替・回答・削除キャンセルを操作する。別の未ログイン画面で公開一覧が再読み込みなしで更新されることを確認する。sign-in / sign-upのClerk標準UIを開き、フォームが画面内に収まることを確認する。
 
 今回のブラウザ検証は代表データを使ったレイアウト検証であり、Clerkの実認証画面・Convex実接続・iPhone実機のソフトウェアキーボード表示は未検証。これらは人間による外部サービス設定後の確認事項である。
+
+## Release readiness UI（#20）
+
+320 / 375 / 390 / 430 / 1440pxを想定し、全主要画面のCSSとコンポーネント構造をレビューした。共通の最大幅・min-width:0・長文折り返し、16px入力、44px操作、折り返すボタン列、画面内の削除確認、Clerkカードのmax-widthを維持。回答フォームの操作列も折り返すよう修正した。focus-visible、label、文字によるstatus、reduced-motion対応を確認。loading / empty / errorにも共通の余白・背景を適用。
+
+今回のブラウザ接続にはDOM操作対応のbrowser surfaceがなく、指定viewportの新デザインのブラウザ目視確認は未実施。前回#15の確認結果は今回の目視結果ではない。実Clerk画面を含め、設定後に上記viewportで再確認すること。

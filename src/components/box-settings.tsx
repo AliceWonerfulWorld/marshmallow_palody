@@ -26,7 +26,7 @@ export function BoxSettings() {
     finally { setPending(false); }
   }
   return <main className="space-y-4 p-4 sm:p-6"><h1 className="text-2xl font-bold">設定</h1>
-    {!box ? <p role="status">読み込み中…</p> : <form onSubmit={submit} className="card space-y-4">
+    {!box ? <p role="status" className="feedback">読み込み中…</p> : <form onSubmit={submit} className="card space-y-4">
       <h2 className="text-xl font-bold">質問箱の公開モード</h2>
       <p>現在: {modes.find(mode => mode.value === box.visibilityMode)?.label}</p>
       <fieldset disabled={pending} className="space-y-3"><legend>新しい質問の公開方法</legend>
@@ -34,7 +34,7 @@ export function BoxSettings() {
       </fieldset>
       <p>変更は今後の新規質問に適用します。既存の質問の公開状態は変わりません。個別の公開・非公開は受信箱で変更できます。</p>
       <button type="submit" disabled={pending}>{pending ? "保存中…" : "保存する"}</button>
-      <p role="status">{message}</p>
+      <p role="status" className="feedback">{message}</p>
     </form>}
   </main>;
 }

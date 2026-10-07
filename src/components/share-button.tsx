@@ -8,5 +8,5 @@ export function ShareButton({ username }: { username: string }) {
       setMessage("URLをコピーしました。");
     } catch { setMessage("コピーできませんでした。アドレスバーのURLをコピーしてください。"); }
   }
-  return <div><button type="button" onClick={copy} className="underline">質問箱のURLをコピー</button><p role="status">{message}</p></div>;
+  return <div><button type="button" onClick={copy} className="underline">質問箱のURLをコピー</button><p role="status" className="feedback">{message}</p></div>;
 }

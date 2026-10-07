@@ -27,7 +27,7 @@ export function AnswerForm({ question, onClose }: { question: Doc<"questions">; 
     <label htmlFor={id}>回答内容</label>
     <textarea id={id} aria-describedby={`${id}-length`} rows={5} className="block w-full" value={content} disabled={pending} onChange={event => setContent(event.target.value)} />
     <p id={`${id}-length`}>{length} / 2000文字</p>
-    <div className="flex gap-4"><button type="submit" disabled={pending || length < 1 || length > 2000}>{pending ? "投稿中…" : "回答を公開する"}</button><button type="button" disabled={pending} onClick={onClose}>キャンセル</button></div>
+    <div className="flex flex-wrap gap-3"><button type="submit" disabled={pending || length < 1 || length > 2000}>{pending ? "投稿中…" : "回答を公開する"}</button><button type="button" disabled={pending} onClick={onClose}>キャンセル</button></div>
     {error && <p role="alert">{error}</p>}
   </form>;
 }

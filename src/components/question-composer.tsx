@@ -27,11 +27,11 @@ export function QuestionComposer({ boxId }: { boxId: Id<"questionBoxes"> }) {
   }
   return <form onSubmit={submit} className="card space-y-3">
     <h2 className="text-xl font-bold">匿名で質問する</h2>
-    <p>ログイン不要です。投稿者のアカウント情報は保存しません。</p>
+    <p className="metadata">ログイン不要です。投稿者のアカウント情報は保存しません。</p>
     <label htmlFor="question-content">質問内容</label>
     <textarea id="question-content" aria-describedby="question-length" className="block w-full" rows={5} value={content} disabled={pending} onChange={event => setContent(event.target.value)} />
-    <p id="question-length">{length} / 1000文字</p>
+    <p className="metadata" id="question-length">{length} / 1000文字</p>
     <button type="submit" disabled={pending || length < 1 || length > 1000}>{pending ? "送信中…" : "質問を送信"}</button>
-    <p role="status">{message}</p>
+    <p role="status" className="feedback">{message}</p>
   </form>;
 }
