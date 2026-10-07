@@ -1,0 +1,39 @@
+{
+  "name": "marshmallow-palody",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0 <23 || >=24.0.0 <25 || >=26.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^7.9.11",
+    "convex": "^1.46.0",
+    "next": "16.4.0",
+    "react": "~19.3.0",
+    "react-dom": "~19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.0",
+    "jsdom": "^27.0.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.3"
+  }
+}
