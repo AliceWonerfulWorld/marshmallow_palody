@@ -14,6 +14,19 @@ export function QuestionFeed({ boxId }: { boxId: Id<"questionBoxes"> }) {
     </article>)}
     {status === "CanLoadMore" && <button onClick={() => loadMore(20)}>もっと読む</button>}
     {status === "LoadingMore" && <p role="status">読み込み中…</p>}
-    <h2 className="text-xl font-bold">回答済み</h2><p>回答はまだありません。</p>
+    <AnsweredFeed boxId={boxId} />
+  </section>;
+}
+
+function AnsweredFeed({ boxId }: { boxId: Id<"questionBoxes"> }) {
+  const { results, status, loadMore } = usePaginatedQuery(api.answers.publicAnswered, { boxId }, { initialNumItems: 20 });
+  return <section className="space-y-4" aria-label="回答済み">
+    <h2 className="text-xl font-bold">回答済み</h2>
+    {status === "LoadingFirstPage" ? <p role="status">読み込み中…</p> : results.length === 0 ? <p>公開された回答はまだありません。</p> : results.map(entry => <article key={entry.id} className="card space-y-3">
+      <p className="whitespace-pre-wrap">Q. {entry.question}</p><p className="whitespace-pre-wrap">A. {entry.answer}</p>
+      <time dateTime={new Date(entry.answeredAt).toISOString()}>{new Date(entry.answeredAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })}</time>
+    </article>)}
+    {status === "CanLoadMore" && <button onClick={() => loadMore(20)}>回答をもっと読む</button>}
+    {status === "LoadingMore" && <p role="status">読み込み中…</p>}
   </section>;
 }

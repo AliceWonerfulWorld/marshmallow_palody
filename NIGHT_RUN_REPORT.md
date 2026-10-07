@@ -18,3 +18,4 @@
 - #6: identity基準のInbox（新着順・ページング・状態フィルタ）、所有者限定公開切替と確認付き削除、関連回答の同時削除、回答導線。
 - #7: 匿名ブラウザID（アカウント非連携）、Convex固定window 60秒3件、原子的カウントと投稿、共通本文validator、制限メッセージとREADMEの限界説明。生IP保存なし。
 - #4: public AND unansweredのインデックスqueryとreactive一覧、所有者限定のモード設定。モード変更は新規投稿だけに適用、既存visibilityを保持。匿名閲覧用ConvexProviderを追加。
+- #5: 所有者限定・1質問1回答の原子的保存、trim後1〜2000文字、回答時public/answeredへ遷移、Inbox回答フォーム、公開Q&Aのreactive一覧（回答作成日時順）。private・孤児Answerはbackendで除外。

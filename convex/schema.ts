@@ -31,5 +31,6 @@ export default defineSchema({
   answers: defineTable({
     questionId: v.id("questions"), authorUserId: v.id("users"), content: v.string(),
     createdAt: v.number(), updatedAt: v.number(),
-  }).index("by_question_id", ["questionId"]),
+  }).index("by_question_id", ["questionId"])
+    .index("by_author_created", ["authorUserId", "createdAt"]),
 });

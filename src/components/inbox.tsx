@@ -1,4 +1,5 @@
 "use client";
+import { AnswerForm } from "./answer-form";
 import { useState } from "react";
 import { useConvexAuth, useMutation, usePaginatedQuery, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
@@ -43,7 +44,7 @@ function InboxCard({ question }: { question: Doc<"questions"> }) {
       <button disabled={pending} onClick={() => setConfirmDelete(true)}>削除</button>
       {question.status === "unanswered" && <button disabled={pending} aria-expanded={answerOpen} onClick={() => setAnswerOpen(!answerOpen)}>回答する</button>}
     </div>
-    {answerOpen && <section className="border-t pt-3"><h2 className="font-bold">回答</h2><p>回答入力は準備中です。</p></section>}
+    {answerOpen && <AnswerForm question={question} onClose={() => setAnswerOpen(false)} />}
     {confirmDelete && <div role="group" aria-label="削除の確認"><p>質問と回答を削除します。元に戻せません。</p><button disabled={pending} onClick={() => perform(() => remove({ questionId: question._id }))}>削除を確定</button><button disabled={pending} onClick={() => setConfirmDelete(false)} className="ml-4">キャンセル</button></div>}
     {error && <p role="alert">{error}</p>}
   </article>;
