@@ -15,7 +15,7 @@
 | #20 | mobile-first UI、共通tokens・ボタン・フォーム・カード・状態表示、トップCTA、Auth周辺 | `ad4898f` |
 | #19 | URLコピー、Web Share/fallback、QRカード、受信箱の初回ガイド、公開範囲の説明 | `3be6958` |
 | #17 | 本番手順・環境変数、標準webpack production build、安全なroot error表示 | `747e786` |
-| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | このIssueの独立commit後に確定SHAを追記 |
+| #18 | 10分の受け入れチェック、3モード通しシナリオ、ページ/validation/error、browser/production smoke | `726417f` |
 
 未完了Issue（コード・ドキュメント）: なし。
 実Clerk/Convex接続・Production deploy・本番GET検査は人間の残作業。外部設定が完了した実利用確認を代替するものではない。
@@ -92,4 +92,6 @@
 
 ## Pull Request
 
-#18のcommit/push後にmain向け1本を作成し、URLを追記する。
+[PR #21: Release readiness: polish UI, sharing, deployment, and acceptance tests](https://github.com/AliceWonerfulWorld/marshmallow_palody/pull/21)
+
+main向け1本を作成済み。Closes #20 / #19 / #17 / #18を記載。全Issueへcommitと検証結果をコメント済み。全実装をoriginの専用ブランチへ通常push済み。PR作成前の最終lint/typecheck/58 tests/buildとgit status/logも確認し、working treeはclean。CIの結果はPRのChecksから確認できる。自動mergeなし。
