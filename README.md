@@ -61,7 +61,7 @@ npm run start
 
 GitHub Actionsの [CI](.github/workflows/ci.yml) は、Pull Requestと `main` へのpush時に `npm ci`、lint、型チェック、テスト、本番ビルドを実行します。Node.jsのバージョンは `.nvmrc` に合わせ、外部サービスの秘密値は使用しません。
 
-実行環境のポート制限によりTurbopackの本番ビルドが失敗する場合は、`npm run build -- --webpack` でビルドできます。
+`npm run build` はNext.jsがサポートするwebpack production buildを使用します。TurbopackのPostCSS処理がローカルport binding制限で失敗する環境でも、同じ標準コマンドで検証・デプロイできます。Turbopackを検査する場合は `npx next build --turbopack` を使用してください。
 
 初期環境の依存関係では、Next.js公式ESLint設定のプラグインが対応するESLint 9を使用しています。インストール時にESLint 9のサポート終了警告と、lint用の間接依存 `braces` に由来する脆弱性警告が出ます。2026年10月8日の確認時点で `braces` の修正版は公開されておらず、対応版の公開後に更新が必要です。
 
@@ -88,3 +88,5 @@ Settingsで公開・承認制・非公開を選べます。変更は今後の質
 3. 参加者はログインなしで質問を送信します。所有者は受信箱で確認・公開・回答します。初期設定は承認制です。回答すると質問と回答が公開されます。
 
 共有URLは閲覧中のoriginから生成します。開発環境で共有したQRは開発環境を指すため、部会では本番URLを開いて共有してください。Web Share非対応・失敗時はコピーへ切り替え、コピーも利用できない場合は表示URLを手動で選択できます。
+
+本番公開の前提・環境変数・Dashboard手順は [デプロイ手順](docs/deployment.md) を参照してください。Clerk Productionには所有ドメインの設定が必要です。
