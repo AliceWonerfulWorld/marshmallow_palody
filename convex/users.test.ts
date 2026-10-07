@@ -25,6 +25,16 @@ describe("users", () => {
     expect(rows[0]).not.toHaveProperty("email");
   });
 
+  it("同期時に承認制の質問箱を1件だけ準備する", async () => {
+    const t = convexTest(schema, modules);
+    const user = t.withIdentity({ subject: "owner" });
+    const id = await user.mutation(api.users.upsert, {});
+    await user.mutation(api.users.upsert, {});
+    const boxes = await t.run(ctx => ctx.db.query("questionBoxes").collect());
+    expect(boxes).toHaveLength(1);
+    expect(boxes[0]).toMatchObject({ ownerUserId: id, visibilityMode: "approval" });
+  });
+
   it("名前の衝突時にURL安全なsuffixを付け、他ユーザーのデータを返さない", async () => {
     const t = convexTest(schema, modules);
     const first = t.withIdentity({ subject: "first", name: "Alice" });
