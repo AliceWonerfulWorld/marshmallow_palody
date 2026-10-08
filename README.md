@@ -89,7 +89,7 @@ Settingsで公開・承認制・非公開を選べます。変更は今後の質
 
 共有URLは閲覧中のoriginから生成します。開発環境で共有したQRは開発環境を指すため、部会では本番URLを開いて共有してください。Web Share非対応・失敗時はコピーへ切り替え、コピーも利用できない場合は表示URLを手動で選択できます。
 
-本番公開の前提・環境変数・Dashboard手順は [デプロイ手順](docs/deployment.md) を参照してください。Clerk Productionには所有ドメインの設定が必要です。
+部会向け公開テストは、独自ドメインを購入せずVercelのURL + Clerk Development + Convex Developmentを使用します。[公開テスト環境の手順・確認状況](docs/public-test-environment.md)を参照してください。継続利用時のProduction移行は [本番デプロイ手順](docs/deployment.md) を参照してください。
 
 ## 部会前の受け入れ検査
 
