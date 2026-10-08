@@ -91,6 +91,8 @@ Settingsで公開・承認制・非公開を選べます。変更は今後の質
 
 部会向け公開テストは、独自ドメインを購入せずVercelのURL + Clerk Development + Convex Developmentを使用します。[公開テスト環境の手順・確認状況](docs/public-test-environment.md)を参照してください。継続利用時のProduction移行は [本番デプロイ手順](docs/deployment.md) を参照してください。
 
+公開テストURL: https://marshmallow-palody.vercel.app （Clerk / ConvexはDevelopment）。deploy対象と接続検査・残作業は[検証記録](docs/vercel-public-test-validation.md)を参照してください。
+
 ## 部会前の受け入れ検査
 
 [約10分のチェックリスト](docs/acceptance-test.md)で登録・共有・匿名投稿・Inbox・公開モード・回答・匿名性・スマホを確認します。
