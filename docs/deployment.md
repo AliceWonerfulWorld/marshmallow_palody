@@ -1,5 +1,7 @@
 # 本番デプロイ手順
 
+部会向けの公開テストは、独自ドメインを用意せずVercel URL + Clerk Development + Convex Developmentを採用する。[公開テスト環境の手順](public-test-environment.md)を参照する。この文書のProduction手順は、継続利用が決まった後の移行用として残す。
+
 2026-10-08確認。対象はこのリポジトリのNext.js 16.4 / Clerk / Convex。
 コードの準備とローカルproduction buildは完了。本番Dashboard変更・deploy・秘密値取得は未実施。
 
