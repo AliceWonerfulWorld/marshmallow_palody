@@ -42,7 +42,7 @@ Clerk公式はホスト提供の `*.vercel.app` 等のPreview URLにDevelopment�
 | サインイン方法 | Clerkの公開環境設定でusername/password、GitHub・Google・Xの有効化を確認。登録はpublic。実ログインはIssue #25で検査 |
 | Convex integration | Backend APIで既存の `convex` JWT templateとaudience、name・picture claimを確認。不足していた `preferred_username: {{user.username}}` を既存claimを保持して追加し、保存結果を確認 |
 | 公開テスト方針 | Vercel URL + Clerk Development + Convex Developmentで確定 |
-| 公開テストのdeploy | Issue #24で実施予定。今回未実施 |
+| 公開テストのdeploy | Issue #24でVercel deploy成功。URL・接続確認状況は[検証記録](vercel-public-test-validation.md) |
 
 Clerk側の準備とIssue #23のConvex Development構成は完了し、Issue #24へ進める。Issue #24では人間が管理するDevelopmentキーをVercelに設定する。Issue #25で実サービスの受け入れ検査を行う。既存キーの新規発行・ローテーションやProduction設定は行っていない。Clerk Dashboard設定ページが空白になったため、Clerk側の最終確認とclaim追加にはClerk公式APIを使用した。
 
