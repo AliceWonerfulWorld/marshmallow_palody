@@ -15,8 +15,8 @@ concurrency:
 jobs:
   checks:
     name: Lint, typecheck, test, build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     env:
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
@@ -39,3 +39,7 @@ jobs:
         run: npm test -- --run
       - name: Build
         run: npm run build
+      - name: Install smoke browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser smoke (no external secrets)
+        run: npm run test:smoke

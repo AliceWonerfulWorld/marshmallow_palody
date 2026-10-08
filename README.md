@@ -61,7 +61,7 @@ npm run start
 
 GitHub Actionsの [CI](.github/workflows/ci.yml) は、Pull Requestと `main` へのpush時に `npm ci`、lint、型チェック、テスト、本番ビルドを実行します。Node.jsのバージョンは `.nvmrc` に合わせ、外部サービスの秘密値は使用しません。
 
-実行環境のポート制限によりTurbopackの本番ビルドが失敗する場合は、`npm run build -- --webpack` でビルドできます。
+`npm run build` はNext.jsがサポートするwebpack production buildを使用します。TurbopackのPostCSS処理がローカルport binding制限で失敗する環境でも、同じ標準コマンドで検証・デプロイできます。Turbopackを検査する場合は `npx next build --turbopack` を使用してください。
 
 初期環境の依存関係では、Next.js公式ESLint設定のプラグインが対応するESLint 9を使用しています。インストール時にESLint 9のサポート終了警告と、lint用の間接依存 `braces` に由来する脆弱性警告が出ます。2026年10月8日の確認時点で `braces` の修正版は公開されておらず、対応版の公開後に更新が必要です。
 
@@ -80,3 +80,25 @@ Settingsで公開・承認制・非公開を選べます。変更は今後の質
 公開ページの「みんなの質問」と回答済みQ&AはConvexのreactive queryで更新します。公開queryはバックエンドで非公開質問を除外し、回答一覧は回答の存在と対応する公開質問を確認します。Inboxは質問の新着順、公開Q&Aは回答の新着順で、いずれもページングします。
 
 スマートフォン表示の検証範囲と実環境での確認手順は [モバイル検証記録](docs/mobile-validation.md)、各Issueのコミットと最終結果は [Night run report](NIGHT_RUN_REPORT.md) を参照してください。
+
+## 部会で質問を募集する
+
+1. ログイン後の受信箱で「自分の質問箱を開く」を選びます（ヘッダーからも移動できます）。
+2. URLをコピー、端末の共有メニュー、または「QRコードを表示」で参加者へ共有します。QRカード内にもURL・コピー・閉じるがあり、QRを読めなくても利用できます。
+3. 参加者はログインなしで質問を送信します。所有者は受信箱で確認・公開・回答します。初期設定は承認制です。回答すると質問と回答が公開されます。
+
+共有URLは閲覧中のoriginから生成します。開発環境で共有したQRは開発環境を指すため、部会では本番URLを開いて共有してください。Web Share非対応・失敗時はコピーへ切り替え、コピーも利用できない場合は表示URLを手動で選択できます。
+
+本番公開の前提・環境変数・Dashboard手順は [デプロイ手順](docs/deployment.md) を参照してください。Clerk Productionには所有ドメインの設定が必要です。
+
+## 部会前の受け入れ検査
+
+[約10分のチェックリスト](docs/acceptance-test.md)で登録・共有・匿名投稿・Inbox・公開モード・回答・匿名性・スマホを確認します。
+
+```bash
+npx playwright install chromium
+npm run test:smoke
+npm run smoke:production -- https://your-production-domain
+```
+
+ブラウザsmokeは明示的にキーなしでproduction buildし、外部DBへ接続しません（実サービス接続へ戻すときは通常build/devを再実行）。本番smokeはGET `/` と `/sign-in`だけを確認し、投稿・削除はしません。

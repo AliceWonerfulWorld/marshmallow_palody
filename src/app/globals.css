@@ -1,27 +1,37 @@
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  font-family: Arial, "Noto Sans JP", sans-serif;
-  background: #fafaf9;
-  color: #1c1917;
-  overflow-wrap: anywhere;
-}
-
+:root { --surface: #ffffff; --canvas: #f8f7fa; --ink: #292433; --muted: #625b70; --accent: #6544a0; --line: #e5e0ec; --radius: 1rem; }
+body { margin: 0; font-family: Arial, "Noto Sans JP", sans-serif; background: var(--canvas); color: var(--ink); overflow-wrap: anywhere; line-height: 1.75; }
 main { min-width: 0; width: 100%; max-width: 48rem; margin: 0 auto; }
 header { max-width: 72rem; margin: 0 auto; }
-input, textarea, select { max-width: 100%; border: 1px solid #a8a29e; border-radius: .5rem; padding: .6rem; background: white; font-size: 1rem; }
+h1, h2 { line-height: 1.4; letter-spacing: -.02em; }
+input, textarea, select { max-width: 100%; border: 1px solid #aaa1b8; border-radius: .75rem; padding: .75rem; background: var(--surface); font-size: 1rem; color: var(--ink); }
+textarea { min-height: 10rem; resize: vertical; line-height: 1.8; }
+input:disabled, textarea:disabled, select:disabled { background: var(--canvas); }
+label, legend { font-weight: 600; }
 button { cursor: pointer; }
-button:not([class*="cl-"]) { min-height: 44px; min-width: 44px; padding: .5rem .75rem; border: 1px solid #a8a29e; border-radius: .5rem; background: white; }
+button:not([class*="cl-"]), .button { display: inline-flex; justify-content: center; align-items: center; min-height: 44px; min-width: 44px; padding: .625rem 1rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--surface); font-weight: 600; line-height: 1.5; text-decoration: none; transition: background-color 150ms; }
+button:not([class*="cl-"]):hover, .button:hover { background: #f0ecf6; }
+button[type="submit"]:not([class*="cl-"]), .button-primary, button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: white; }
+button[type="submit"]:not([class*="cl-"]):hover, .button-primary:hover, button[aria-pressed="true"]:hover { background: #533586; }
+button.danger { color: #a12b3b; border-color: #e7bdc3; }
 header a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 .cl-userButtonTrigger { min-width: 44px; min-height: 44px; }
-textarea { min-height: 10rem; resize: vertical; }
 .auth-page .cl-rootBox, .auth-page .cl-cardBox, .auth-page .cl-card { max-width: 100%; min-width: 0; }
 .auth-page .cl-formFieldInput { font-size: 1rem; }
-button:disabled { cursor: wait; opacity: .6; }
-:focus-visible { outline: 2px solid #57534e; outline-offset: 3px; }
-.card { min-width: 0; padding: 1rem; border: 1px solid #e7e5e4; border-radius: 1rem; background: white; }
+button:disabled { cursor: not-allowed; opacity: .6; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.card { min-width: 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 8px #29243304; }
+.card p { line-height: 1.8; }
+.card fieldset label { min-height: 44px; align-items: center; padding: .5rem; border-radius: .5rem; }
+.card fieldset label:has(input:checked) { background: #f0ecf6; }
+.metadata { color: var(--muted); font-size: .875rem; }
+.badge { display: inline-flex; padding: .125rem .625rem; background: #f0ecf6; border-radius: 999px; color: #533586; font-size: .875rem; }
+.feedback:not(:empty) { padding: .75rem 1rem; background: #f0ecf6; border-radius: .75rem; }
+[role="alert"] { color: #a12b3b; }
+.empty-state { padding: 1.5rem 1rem; color: var(--muted); background: var(--surface); border-radius: var(--radius); }
+.answer { border-left: 3px solid #b8a4d9; padding-left: 1rem; }
+@media (min-width: 640px) { .card { padding: 1.5rem; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
-.card p { line-height: 1.75; }
-.card fieldset label { min-height: 44px; align-items: center; }
-@media (min-width: 640px) { .card { padding: 1.25rem; } }
+.qr-card { padding: 1rem; border-radius: var(--radius); background: white; border: 1px solid var(--line); }

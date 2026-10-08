@@ -33,3 +33,14 @@ it("失敗時は入力を保ち、ユーザー向けメッセージを表示し�
   expect(input).toHaveValue("消さない質問");
   expect(screen.getByRole("button", { name: "質問を送信" })).toBeEnabled();
 });
+it("1000文字境界を検証し超過投稿を防ぐ", () => {
+  render(<QuestionComposer boxId={"box" as Id<"questionBoxes">} />);
+  const input = screen.getByLabelText("質問内容");
+  const button = screen.getByRole("button", { name: "質問を送信" });
+  fireEvent.change(input, { target: { value: "a".repeat(1000) } });
+  expect(button).toBeEnabled();
+  fireEvent.change(input, { target: { value: "a".repeat(1001) } });
+  expect(button).toBeDisabled();
+  fireEvent.submit(input.closest("form")!);
+  expect(mocks.submit).not.toHaveBeenCalled();
+});
