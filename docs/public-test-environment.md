@@ -36,7 +36,7 @@ Clerk公式はホスト提供の `*.vercel.app` 等のPreview URLにDevelopment�
 | 起点 | PR #21マージ済みmain `93d8b27` |
 | 作業ブランチ | `codex/issue22-clerk-development` |
 | Clerk Developmentキー | ローカル設定の2キーのprefixがDevelopmentであることを値を出力せず確認。DashboardにもDevelopment publishable keyと伏せられた既存secret keyあり |
-| Convex Development | ローカルの `CONVEX_DEPLOYMENT` はDevelopment識別子。遠隔の認証設定は未確認 |
+| Convex Development | Issue #23で既存Developmentのissuer設定・schema/functions/auth同期と8indexの遠隔読み取り検査が成功。詳細は[検証記録](convex-development-validation.md) |
 | 認証コード | Clerkのパス・ログイン後遷移・Convex provider・issuer/audienceの設定あり |
 | Clerk instance | Clerk Backend APIで `environment_type: development` を確認 |
 | サインイン方法 | Clerkの公開環境設定でusername/password、GitHub・Google・Xの有効化を確認。登録はpublic。実ログインはIssue #25で検査 |
@@ -44,7 +44,7 @@ Clerk公式はホスト提供の `*.vercel.app` 等のPreview URLにDevelopment�
 | 公開テスト方針 | Vercel URL + Clerk Development + Convex Developmentで確定 |
 | 公開テストのdeploy | Issue #24で実施予定。今回未実施 |
 
-Clerk側の準備は完了し、Issue #23へ進める。Issue #23では同じDevelopment issuerをConvexに設定してbackendを同期し、Issue #24では人間が管理するDevelopmentキーをVercelに設定する。Issue #25で実サービスの受け入れ検査を行う。既存キーの新規発行・ローテーションやProduction設定は行っていない。Dashboard設定ページが空白になったため、最終確認とclaim追加にはClerk公式APIを使用した。
+Clerk側の準備とIssue #23のConvex Development構成は完了し、Issue #24へ進める。Issue #24では人間が管理するDevelopmentキーをVercelに設定する。Issue #25で実サービスの受け入れ検査を行う。既存キーの新規発行・ローテーションやProduction設定は行っていない。Clerk Dashboard設定ページが空白になったため、Clerk側の最終確認とclaim追加にはClerk公式APIを使用した。
 
 ## 公式資料
 
