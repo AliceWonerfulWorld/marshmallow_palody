@@ -33,13 +33,13 @@ export function BoxList() {
           {box.description && <p className="whitespace-pre-wrap">{box.description}</p>}
           <p className="metadata">{boxModeLabels[box.visibilityMode]}</p>
           <div className="flex flex-wrap gap-2">
-            {/* These destinations are enabled as their features ship in #31–#33. */}
+            {/* These destinations are enabled as their features ship in #32–#33. */}
             <button type="button" disabled title="準備中">公開ページを開く</button>
             <button type="button" disabled title="準備中">Inboxでこの箱を見る</button>
-            <button type="button" disabled title="準備中">メンバーを見る</button>
+            <Link className="button" href={`/boxes/${box._id}/members`} prefetch={false}>メンバーを見る</Link>
             {role === "owner" && <Link className="button" href={`/boxes/${box._id}/settings`} prefetch={false}>設定</Link>}
           </div>
-          <p className="metadata">公開ページ・共有Inbox・メンバー画面は準備中です。</p>
+          <p className="metadata">公開ページ・共有Inboxは準備中です。</p>
         </article>)}
       </section>
     </>}

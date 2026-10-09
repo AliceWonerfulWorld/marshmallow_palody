@@ -7,15 +7,19 @@ const clerk = clerkMiddleware(async (auth, request) => {
   if (isProtectedRoute(request)) await auth.protect();
 }, { signInUrl: "/sign-in", signUpUrl: "/sign-up" });
 
-export default function proxy(request: NextRequest, event: NextFetchEvent) {
+export default async function proxy(request: NextRequest, event: NextFetchEvent) {
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || !process.env.CLERK_SECRET_KEY) {
     // Public pages remain available without credentials; private routes never bypass auth.
     if (isProtectedRoute(request)) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
-    return NextResponse.next();
+    const response = NextResponse.next();
+    if (request.nextUrl.pathname.startsWith("/invite/")) { response.headers.set("Referrer-Policy", "no-referrer"); response.headers.set("Cache-Control", "no-store"); }
+    return response;
   }
-  return clerk(request, event);
+  const response = await clerk(request, event);
+  if (response && request.nextUrl.pathname.startsWith("/invite/")) { response.headers.set("Referrer-Policy", "no-referrer"); response.headers.set("Cache-Control", "no-store"); }
+  return response;
 }
 
 export const config = {

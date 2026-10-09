@@ -29,6 +29,13 @@ export default defineSchema({
   }).index("by_box_user", ["boxId", "userId"])
     .index("by_user_joined", ["userId", "joinedAt"])
     .index("by_box_joined", ["boxId", "joinedAt"]),
+  boxInvitations: defineTable({
+    boxId: v.id("questionBoxes"), invitedByUserId: v.id("users"), tokenHash: v.string(),
+    status: v.union(v.literal("pending"), v.literal("accepted"), v.literal("revoked")),
+    expiresAt: v.number(), createdAt: v.number(), acceptedAt: v.optional(v.number()),
+    acceptedByUserId: v.optional(v.id("users")),
+  }).index("by_token_hash", ["tokenHash"])
+    .index("by_box_status_created", ["boxId", "status", "createdAt"]),
   questions: defineTable({
     boxId: v.id("questionBoxes"), receiverUserId: v.id("users"), content: v.string(),
     visibility, status: questionStatus, createdAt: v.number(), updatedAt: v.number(),
