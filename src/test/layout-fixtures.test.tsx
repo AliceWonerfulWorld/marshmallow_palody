@@ -28,10 +28,11 @@ vi.mock("convex/react", () => ({
   useAction: () => vi.fn(),
   useQuery: (reference: Parameters<typeof getFunctionName>[0]) => {
     switch (getFunctionName(reference)) {
+      case "questions:inbox": return state.status === "LoadingFirstPage" ? undefined : { isDone: state.status === "Exhausted", page: state.empty ? [] : [{ _id: "question", content: longText, boxName: "個人の質問箱", canDelete: true, createdAt: 1000, visibility: "private", status: "unanswered" }] };
       case "invitations:members": return { boxId: "shared-box", name: sharedBox.name, role: "owner", members: [{ userId: "owner", displayName: "オーナー".repeat(20), role: "owner", isSelf: true }, { userId: "member", displayName: "メンバー".repeat(20), role: "member", isSelf: false }] };
       case "invitations:pending": return [{ id: "invite", createdAt: 1000, expiresAt: 9999999999999 }];
       case "boxes:current": return { _id: "box", visibilityMode: "approval" };
-      case "boxes:listMine": return { personal: { username: "owner", visibilityMode: "approval" }, shared: [{ box: sharedBox, role: "owner" }, { box: { ...sharedBox, _id: "member-box", name: "招待参加した箱" }, role: "member" }] };
+      case "boxes:listMine": return { personal: { _id: "box", username: "owner", visibilityMode: "approval" }, shared: [{ box: sharedBox, role: "owner" }, { box: { ...sharedBox, _id: "member-box", name: "招待参加した箱" }, role: "member" }] };
       case "boxes:getForMember": return { box: sharedBox, role: "owner" };
       default: return { username: "owner" };
     }

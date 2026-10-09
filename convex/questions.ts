@@ -50,7 +50,7 @@ export const inbox = query({
       catch { throw new ConvexError("INVALID_CURSOR"); }
       if (!boundary || typeof boundary.createdAt !== "number" || !Number.isFinite(boundary.createdAt) || typeof boundary.creationTime !== "number" || !Number.isFinite(boundary.creationTime) || typeof boundary.id !== "string") throw new ConvexError("INVALID_CURSOR");
     }
-    const count = Math.max(1, Math.min(paginationOpts.numItems, 100));
+    const count = Math.max(1, paginationOpts.numItems);
     const batches = await Promise.all(boxes.map(async ({ box, role }) => {
       const query = ctx.db.query("questions").withIndex("by_box_status_created", q => {
         const range = q.eq("boxId", box._id).eq("status", status);

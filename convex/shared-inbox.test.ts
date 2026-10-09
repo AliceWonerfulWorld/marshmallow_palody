@@ -95,3 +95,26 @@ it("Membershipを失うと保存済みcursorでも共有質問を取得・操作
   await expect(member.mutation(api.answers.create, { questionId: question._id, content: "answer" })).rejects.toThrow("NOT_FOUND");
   await expect(member.query(api.questions.inbox, { status: "unanswered", paginationOpts: { numItems: 20, cursor: "[]" } })).rejects.toThrow("INVALID_CURSOR");
 });
+
+it("拡大したInbox windowは削除・回答・新規投稿後も重複や欠落なく最新の順序を返す", async () => {
+  const { t, owner, boxId, personal } = await fixture();
+  await t.run(async ctx => {
+    for (let i = 0; i < 125; i++) await ctx.db.insert("questions", { boxId: i % 2 ? boxId : personal._id, receiverUserId: personal.ownerUserId, content: `row ${i}`, visibility: "private", status: "unanswered", createdAt: 100 + i, updatedAt: 100 + i });
+  });
+  const list = (numItems: number) => owner.query(api.questions.inbox, { status: "unanswered", paginationOpts: { numItems, cursor: null } });
+  const first = await list(20);
+  expect(first.page).toHaveLength(20);
+  const expanded = await list(120);
+  expect(expanded.page).toHaveLength(120);
+  expect(expanded.page.slice(0, 20)).toEqual(first.page);
+  await owner.mutation(api.questions.remove, { questionId: expanded.page[0]._id });
+  await owner.mutation(api.answers.create, { questionId: expanded.page[1]._id, content: "answer" });
+  await t.mutation(api.questions.submit, { boxId, content: "newest", clientId: "anonymous-client-002" });
+  const refreshed = await list(120);
+  const expected = await t.run(ctx => ctx.db.query("questions").collect());
+  const ids = expected.filter(q => q.status === "unanswered").sort((a, b) => b.createdAt - a.createdAt || b._creationTime - a._creationTime || (a._id < b._id ? 1 : -1)).slice(0, 120).map(q => q._id);
+  expect(refreshed.page.map(q => q._id)).toEqual(ids);
+  expect(new Set(refreshed.page.map(q => q._id)).size).toBe(120);
+  expect(refreshed.page[0].content).toBe("newest");
+  expect(refreshed.isDone).toBe(false);
+});
