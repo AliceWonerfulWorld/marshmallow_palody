@@ -41,7 +41,7 @@ vi.mock("convex/react", () => ({
     loadMore: vi.fn(),
     results: state.empty ? [] : getFunctionName(reference) === "answers:publicAnswered"
       ? [{ id: "answered", question: longText, answer: "回答の本文です。".repeat(30), answeredAt: 1000 }]
-      : [{ _id: "question", id: "question", content: longText, createdAt: 1000, visibility: "private", status: "unanswered" }],
+      : [{ _id: "question", id: "question", content: longText, boxName: "個人の質問箱", canDelete: true, createdAt: 1000, visibility: "private", status: "unanswered" }],
   }),
 }));
 

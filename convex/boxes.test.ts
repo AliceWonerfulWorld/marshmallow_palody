@@ -49,8 +49,8 @@ it("共有箱作成とmembershipはatomicかつ一意で、認可はidentityを�
   expect(await member.run(ctx => canManageQuestion(ctx, question!))).toBe(true);
   expect(await member.run(ctx => canManageQuestion(ctx, question!, "delete"))).toBe(false);
   expect(await owner.run(ctx => canManageQuestion(ctx, question!, "delete"))).toBe(true);
-  expect((await owner.query(api.questions.inbox, { status: "unanswered", paginationOpts: { numItems: 10, cursor: null } })).page).toHaveLength(0);
-  await expect(owner.mutation(api.questions.remove, { questionId })).rejects.toThrow("NOT_FOUND");
+  expect((await owner.query(api.questions.inbox, { status: "unanswered", paginationOpts: { numItems: 10, cursor: null } })).page).toHaveLength(1);
+  await owner.mutation(api.questions.remove, { questionId });
 });
 
 it("metadata境界と予約slug・重複を拒否する", async () => {

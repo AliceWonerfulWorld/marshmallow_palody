@@ -76,3 +76,11 @@ export async function requireOwnedQuestion(ctx: QueryCtx | MutationCtx, id: Id<"
   if (!question || !box || !isPersonalBox(box) || box.ownerUserId !== user._id || question.receiverUserId !== user._id) throw new ConvexError("NOT_FOUND");
   return { user, question };
 }
+
+export async function requireManageableQuestion(ctx: QueryCtx | MutationCtx, id: Id<"questions">, action: "manage" | "delete" = "manage") {
+  const question = await ctx.db.get(id);
+  if (!question) { await requireUser(ctx); throw new ConvexError("NOT_FOUND"); }
+  const access = await requireBoxMember(ctx, question.boxId);
+  if (action === "delete" && access.role !== "owner") throw new ConvexError("NOT_FOUND");
+  return { ...access, question };
+}
