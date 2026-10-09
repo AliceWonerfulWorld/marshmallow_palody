@@ -71,7 +71,6 @@
 - いいね・ランキング
 - 画像投稿
 - AI機能
-- グループ質問箱
 - SNSタイムライン
 - 通知
 - 回答コメント欄
@@ -122,3 +121,22 @@ Issue #1対応時点のリポジトリにはREADMEのみがあり、`package.jso
 - `docs/product-spec.md` に本Issue相当の仕様がある。
 - READMEから仕様書へ辿れる。
 - 後続Issueだけを読んだCodexが実装方針を判断できるよう、仕様書に共通方針を残す。
+
+
+## 共有質問箱（Issue #29以降）
+
+個人箱（personal）は各ユーザーに1件あり、既存の `/u/[username]`、個人Inbox、投稿・回答・公開設定を維持する。`kind` 未設定の既存箱はpersonalとして読み、移行や既存Question / Answerの再作成を必要としない。同期処理は所有者の箱からpersonalだけを選び、なければトランザクション内で1件作成する。`boxes.current` は引き続きpersonalを返す。
+
+共有箱（shared）はユーザーが0個以上作成・参加でき、公開URLは `/b/[slug]` とする。nameはtrim後1〜80文字、descriptionはtrim後最大300文字。slugは3〜48文字のlowercase ASCII英数字とハイフン（先頭・末尾不可）で、全箱で一意。`u`, `b`, `invite`, `boxes`, `inbox`, `settings`, `sign-in`, `sign-up`, `api`, `admin` は予約する。初期公開モードはapproval。
+
+`boxMembers` はboxとuserの多対多membershipを表し、boxId + userIdをmutationのトランザクションで一意に保証する。作成者は `ownerUserId` と一致するowner membershipを持つ。MVPのownerはprimary ownerのみとし、他の参加者はmemberとする。
+
+| 操作 | Owner | Member |
+| --- | --- | --- |
+| 全質問閲覧（非公開含む）・公開切替・回答 | 可 | 可 |
+| 質問削除 | 可 | 不可 |
+| 箱設定変更・招待発行/失効・メンバー削除 | 可 | 不可 |
+
+招待フローはownerがリンクを発行し、受信者がClerkへログインして受諾、認証済みConvex Userにmembershipを作成する。繰り返し受諾してもmembershipは増えない。招待発行・失効・受諾UI、共有Inbox、共有公開ページ・回答は後続Issueで実装する。一般ユーザーは匿名投稿とpublicな未回答質問・Q&Aの閲覧ができ、非公開情報は公開Queryから返さない。
+
+Issue #29は後方互換schema、共有箱作成mutationと認可helperを整える。認可はClerk identity → Convex User → membershipで判定し、クライアント指定userIdを信頼しない。personalの認可は箱所有者を確認する。sharedのQuestionはboxIdを所有概念の正とし、receiverUserIdは既存personal互換のため保持する。既存personal用の質問管理APIはsharedを扱わず、個人InboxもpersonalのboxIdで取得する。後続APIはrequireBoxMember / requireBoxOwner / canManageQuestionを使い、削除にはowner権限を要求する。
