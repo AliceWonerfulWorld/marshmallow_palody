@@ -12,6 +12,7 @@ export function Header({ authEnabled }: { authEnabled: boolean }) {
           <Show when="signed-out">{login}</Show>
           <Show when="signed-in">
             {process.env.NEXT_PUBLIC_CONVEX_URL && <OwnBoxLink />}
+            <Link href="/boxes" prefetch={false}>質問箱一覧</Link>
             <Link href="/inbox" prefetch={false}>受信箱</Link>
             <Link href="/settings" prefetch={false}>設定</Link>
             <UserButton />

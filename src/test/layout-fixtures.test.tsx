@@ -8,18 +8,29 @@ import { QuestionComposer } from "@/components/question-composer";
 import { QuestionFeed } from "@/components/question-feed";
 import { Inbox } from "@/components/inbox";
 import { BoxSettings } from "@/components/box-settings";
+import { BoxList } from "@/components/box-list";
+import { SharedBoxCreate } from "@/components/shared-box-create";
+import { SharedBoxSettings } from "@/components/shared-box-settings";
 import ErrorPage from "@/app/error";
 import type { Id } from "../../convex/_generated/dataModel";
 
 const state = vi.hoisted(() => ({ status: "Exhausted", empty: false }));
+const sharedBox = { _id: "shared-box", name: "あ".repeat(80), slug: "a".repeat(48), description: "説明".repeat(150), visibilityMode: "approval" };
 const longText = "質問の本文です。".repeat(25) + "\nhttps://example.com/" + "long-path".repeat(30);
 vi.mock("@clerk/nextjs", () => ({ Show: ({ when, children }: { when: string; children: React.ReactNode }) => when === "signed-in" ? children : null, UserButton: () => <button aria-label="ユーザーメニュー">○</button> }));
-vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }) }));
 vi.mock("@/app/u/[username]/actions", () => ({ submitQuestion: vi.fn() }));
 vi.mock("convex/react", () => ({
   useConvexAuth: () => ({ isAuthenticated: true }),
   useMutation: () => vi.fn(),
-  useQuery: (reference: Parameters<typeof getFunctionName>[0]) => getFunctionName(reference) === "boxes:current" ? { _id: "box", visibilityMode: "approval" } : { username: "owner" },
+  useQuery: (reference: Parameters<typeof getFunctionName>[0]) => {
+    switch (getFunctionName(reference)) {
+      case "boxes:current": return { _id: "box", visibilityMode: "approval" };
+      case "boxes:listMine": return { personal: { username: "owner", visibilityMode: "approval" }, shared: [{ box: sharedBox, role: "owner" }, { box: { ...sharedBox, _id: "member-box", name: "招待参加した箱" }, role: "member" }] };
+      case "boxes:getForMember": return { box: sharedBox, role: "owner" };
+      default: return { username: "owner" };
+    }
+  },
   usePaginatedQuery: (reference: Parameters<typeof getFunctionName>[0]) => ({
     status: state.status,
     loadMore: vi.fn(),
@@ -36,6 +47,10 @@ it("実コンポーネントの長文・QR・回答/削除・設定・各状態�
     const { container } = render(<><Header authEnabled />{ui}</>);
     prepare?.();
     expect(container.querySelector("main")).not.toBeNull();
+    // HTML snapshots must preserve selected properties for browser layout QA.
+    for (const option of container.querySelectorAll("select option")) {
+      option.toggleAttribute("selected", (option as HTMLOptionElement).selected);
+    }
     fixtures[name] = container.innerHTML;
     cleanup();
   }
@@ -53,6 +68,14 @@ it("実コンポーネントの長文・QR・回答/削除・設定・各状態�
     expect(screen.getByRole("group", { name: "削除の確認" })).toBeInTheDocument();
   });
   capture("settings", <BoxSettings />, () => { expect(screen.getByRole("radio", { name: /承認制/ })).toBeChecked(); });
+  capture("boxes", <BoxList />, () => { expect(screen.getByText("Member")).toBeVisible(); });
+  capture("boxes-new", <SharedBoxCreate />, () => {
+    fireEvent.change(screen.getByLabelText("名前"), { target: { value: sharedBox.name } });
+    fireEvent.change(screen.getByLabelText("slug（URLの末尾）"), { target: { value: sharedBox.slug } });
+    fireEvent.change(screen.getByLabelText("説明（任意）"), { target: { value: sharedBox.description } });
+    expect(screen.getByText(`公開URL: /b/${sharedBox.slug}`)).toBeVisible();
+  });
+  capture("boxes-settings", <SharedBoxSettings boxId="shared-box" />);
   state.empty = true;
   capture("empty", publicPage, () => { expect(screen.getByText("まだ公開されている質問はありません")).toBeVisible(); });
   state.status = "LoadingFirstPage";

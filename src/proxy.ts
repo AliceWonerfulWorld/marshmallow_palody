@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import type { NextRequest, NextFetchEvent } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/inbox(.*)", "/settings(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/inbox(.*)", "/settings(.*)", "/boxes(.*)"]);
 const clerk = clerkMiddleware(async (auth, request) => {
   if (isProtectedRoute(request)) await auth.protect();
 }, { signInUrl: "/sign-in", signUpUrl: "/sign-up" });

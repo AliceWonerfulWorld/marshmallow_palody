@@ -140,3 +140,14 @@ Issue #1対応時点のリポジトリにはREADMEのみがあり、`package.jso
 招待フローはownerがリンクを発行し、受信者がClerkへログインして受諾、認証済みConvex Userにmembershipを作成する。繰り返し受諾してもmembershipは増えない。招待発行・失効・受諾UI、共有Inbox、共有公開ページ・回答は後続Issueで実装する。一般ユーザーは匿名投稿とpublicな未回答質問・Q&Aの閲覧ができ、非公開情報は公開Queryから返さない。
 
 Issue #29は後方互換schema、共有箱作成mutationと認可helperを整える。認可はClerk identity → Convex User → membershipで判定し、クライアント指定userIdを信頼しない。personalの認可は箱所有者を確認する。sharedのQuestionはboxIdを所有概念の正とし、receiverUserIdは既存personal互換のため保持する。既存personal用の質問管理APIはsharedを扱わず、個人InboxもpersonalのboxIdで取得する。後続APIはrequireBoxMember / requireBoxOwner / canManageQuestionを使い、削除にはowner権限を要求する。
+
+
+## 共有質問箱の作成・一覧・設定（Issue #30）
+
+認証必須の `/boxes` はpersonalとmembershipで参加中のsharedを表示する。Ownerとして作成した箱に加え、招待参加したMemberの箱も同じ一覧に表示し、Owner / Member badgeと公開モードを併記する。ヘッダーの「質問箱一覧」から移動でき、personalは既存公開URLと個人設定へ移動できる。
+
+`/boxes/new` はname / slug / description / visibilityModeを入力する。初期モードはapprovalで、`/b/[slug]` のURL previewを表示する。作成成功後は一覧へ移動する。slugの予約語・形式・一意性はサーバーで検証し、箱とowner membershipは同一トランザクションで作成する。
+
+`/boxes/[boxId]/settings` はOwnerのみ利用できる。ページの認証済みqueryと更新mutationの両方でroleを確認し、Member・非参加者・不正IDには設定画面を表示しない。name / description / visibilityModeを変更でき、slugは読取専用。更新mutationはpersonalを拒否し、既存質問のvisibilityを変更しない。共有箱自体の削除は提供しない。
+
+APIは `boxes.listMine`, `boxes.createShared`, `boxes.getForMember`, `boxes.updateShared`。listMineは現在のUserのmembership indexから取得し、他Userの箱や孤立したmembershipを返さない。getForMemberはsharedのみを返し、取得不能な箱はnullとする。公開ページ・共有Inbox・メンバー画面はIssue #31〜#33で提供するため、現時点の一覧カードの該当操作は準備中として無効にする。
