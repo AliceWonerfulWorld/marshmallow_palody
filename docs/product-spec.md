@@ -137,7 +137,7 @@ Issue #1対応時点のリポジトリにはREADMEのみがあり、`package.jso
 | 質問削除 | 可 | 不可 |
 | 箱設定変更・招待発行/失効・メンバー削除 | 可 | 不可 |
 
-招待フローはownerがリンクを発行し、受信者がClerkへログインして受諾、認証済みConvex Userにmembershipを作成する。繰り返し受諾してもmembershipは増えない。招待発行・失効・受諾UI、共有Inbox、共有公開ページ・回答は後続Issueで実装する。一般ユーザーは匿名投稿とpublicな未回答質問・Q&Aの閲覧ができ、非公開情報は公開Queryから返さない。
+招待フローはownerがリンクを発行し、受信者がClerkへログインして受諾、認証済みConvex Userにmembershipを作成する。繰り返し受諾してもmembershipは増えない。招待発行・失効・受諾UIとメンバー管理を提供する。共有Inbox、共有公開ページ・回答は後続Issueで実装する。一般ユーザーは匿名投稿とpublicな未回答質問・Q&Aの閲覧ができ、非公開情報は公開Queryから返さない。
 
 Issue #29は後方互換schema、共有箱作成mutationと認可helperを整える。認可はClerk identity → Convex User → membershipで判定し、クライアント指定userIdを信頼しない。personalの認可は箱所有者を確認する。sharedのQuestionはboxIdを所有概念の正とし、receiverUserIdは既存personal互換のため保持する。既存personal用の質問管理APIはsharedを扱わず、個人InboxもpersonalのboxIdで取得する。後続APIはrequireBoxMember / requireBoxOwner / canManageQuestionを使い、削除にはowner権限を要求する。
 
@@ -150,4 +150,15 @@ Issue #29は後方互換schema、共有箱作成mutationと認可helperを整え
 
 `/boxes/[boxId]/settings` はOwnerのみ利用できる。ページの認証済みqueryと更新mutationの両方でroleを確認し、Member・非参加者・不正IDには設定画面を表示しない。name / description / visibilityModeを変更でき、slugは読取専用。更新mutationはpersonalを拒否し、既存質問のvisibilityを変更しない。共有箱自体の削除は提供しない。
 
-APIは `boxes.listMine`, `boxes.createShared`, `boxes.getForMember`, `boxes.updateShared`。listMineは現在のUserのmembership indexから取得し、他Userの箱や孤立したmembershipを返さない。getForMemberはsharedのみを返し、取得不能な箱はnullとする。公開ページ・共有Inbox・メンバー画面はIssue #31〜#33で提供するため、現時点の一覧カードの該当操作は準備中として無効にする。
+APIは `boxes.listMine`, `boxes.createShared`, `boxes.getForMember`, `boxes.updateShared`。listMineは現在のUserのmembership indexから取得し、他Userの箱や孤立したmembershipを返さない。getForMemberはsharedのみを返し、取得不能な箱はnullとする。公開ページ・共有InboxはIssue #32〜#33で提供するため、現時点の一覧カードの該当操作は準備中として無効にする。メンバー画面への導線はIssue #31で提供する。
+
+
+## 招待リンクとメンバー管理（Issue #31）
+
+`/boxes/[boxId]/members` はOwner/Memberが利用でき、メンバーの表示名とrole、自分の参加状態を表示する。Clerk IDやemailは返さない。Ownerだけ招待発行・未使用招待一覧・失効・Member削除を操作でき、サーバーでもroleを検証する。Owner自身は削除できず、削除されたMemberは参加者向けAPIから即除外される。既存Answerは残す。共有Inbox/private質問のAPIはIssue #32でこのmembership認可を利用する。
+
+招待はNode actionで暗号学的にランダムな32バイト（256bit）のtokenを生成し、SHA-256のtokenHashだけをboxInvitationsに保存する。有効期限は7日で、1リンクにつき1人の新規参加に使用できる。raw tokenは発行時だけOwnerに返し、ログやDB、ブラウザの永続ストレージへ保存しない。リンクの再表示は提供せず、必要なら新しいリンクを発行する。発行・受諾はinternal mutationで再認可し、招待状態とmembershipを同一トランザクションで変更する。
+
+`/invite/[token]` はログインなしで安全な状態表示と有効な箱名を取得できる。ログイン/登録後は同じ招待ページに戻り、利用者が「参加する」を押すと認証済みUserをMemberとして追加して `/boxes` へ移動する。期限切れ・失効・不存在・使用済みは個人情報を含まない固定メッセージを表示する。既存Member/Ownerが有効なpending招待を開いてもmembershipを増やさず、招待を消費しない。成功した利用者による再受諾はidempotentとするが、削除後に受諾済みリンクで再参加はできない。
+
+招待URLは現在originから生成し、公開質問募集URLと明示的に区別する。招待ページにはno-referrer・no-store・noindexを設定する。APIは `invitationTokens.create/inspect/accept` と `invitations.members/pending/revoke/removeMember`。非公開情報の取得・管理はidentityに基づき、tokenだけでmembership管理APIを利用できない。

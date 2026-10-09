@@ -8,7 +8,7 @@ for (const width of [320, 375, 390, 430, 1440]) {
     await page.route("**/*", route => {
       return new URL(route.request().url()).origin === "http://127.0.0.1:3100" ? route.continue() : route.abort();
     });
-    for (const path of ["/", "/sign-in", "/sign-up", "/u/missing", "/inbox", "/settings", "/boxes", "/boxes/new", "/boxes/invalid/settings"]) {
+    for (const path of ["/", "/sign-in", "/sign-up", "/u/missing", "/inbox", "/settings", "/boxes", "/boxes/new", "/boxes/invalid/settings", "/boxes/invalid/members", "/invite/invalid"]) {
       const response = await page.goto(path);
       expect(response?.status()).toBe(200);
       if (path === "/") {
@@ -19,6 +19,10 @@ for (const width of [320, 375, 390, 430, 1440]) {
         expect(await create.evaluate(node => getComputedStyle(node).outlineStyle)).not.toBe("none");
       } else if (path === "/u/missing") {
         await expect(page.getByRole("main").getByRole("alert")).toHaveText("現在この質問箱を利用できません。");
+      } else if (path === "/invite/invalid") {
+        await expect(page.getByRole("main").getByRole("alert")).toHaveText("現在この招待を利用できません。");
+        expect(response?.headers()["referrer-policy"]).toBe("no-referrer");
+        expect(response?.headers()["cache-control"]).toContain("no-store");
       } else if (path === "/inbox" || path === "/settings" || path.startsWith("/boxes")) {
         await expect(page).toHaveURL(/\/sign-in$/);
         await expect(page.getByText("現在ログインを利用できません。")).toBeVisible();
@@ -70,7 +74,7 @@ for (const width of [320, 375, 390, 430, 1440]) {
         });
         expect(contrast).toBeGreaterThanOrEqual(4.5);
       }
-      if ((width === 375 || width === 1440) && ["public", "inbox", "settings", "boxes", "boxes-new", "boxes-settings"].includes(name)) {
+      if ((width === 375 || width === 1440) && ["public", "inbox", "settings", "boxes", "boxes-new", "boxes-settings", "box-members", "invite"].includes(name)) {
         await page.screenshot({ path: testInfo.outputPath(`${name}-${width}.png`), fullPage: true });
       }
     }
