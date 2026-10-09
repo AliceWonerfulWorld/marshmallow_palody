@@ -2,7 +2,7 @@ import { validatedContent } from "./lib/content";
 import { ConvexError, v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
 import { visibility, questionStatus } from "./schema";
-import { requireUser, requireOwnedQuestion } from "./lib/access";
+import { getPersonalBox, requireUser, requireOwnedQuestion } from "./lib/access";
 import { mutation, query } from "./_generated/server";
 
 export const submit = mutation({
@@ -32,7 +32,9 @@ export const inbox = query({
   args: { status: questionStatus, paginationOpts: paginationOptsValidator },
   handler: async (ctx, { status, paginationOpts }) => {
     const user = await requireUser(ctx);
-    return ctx.db.query("questions").withIndex("by_receiver_status_created", q => q.eq("receiverUserId", user._id).eq("status", status)).order("desc").paginate(paginationOpts);
+    const box = await getPersonalBox(ctx, user._id);
+    if (!box) return { page: [], isDone: true, continueCursor: "" };
+    return ctx.db.query("questions").withIndex("by_box_status_created", q => q.eq("boxId", box._id).eq("status", status)).order("desc").paginate(paginationOpts);
   },
 });
 export const setVisibility = mutation({
