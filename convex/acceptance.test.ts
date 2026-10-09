@@ -30,7 +30,7 @@ it.each(["public", "approval", "private"] as const)("部会の通しシナリオ
   expect(inbox.page).toHaveLength(2);
   expect((await stranger.query(api.questions.inbox, { status: "unanswered", paginationOpts })).page).toEqual([]);
   const question = inbox.page.find(row => row.content === "ログイン中でも匿名")!;
-  expect(Object.keys(question).sort()).toEqual(["_id", "_creationTime", "boxId", "receiverUserId", "content", "visibility", "status", "createdAt", "updatedAt"].sort());
+  expect(Object.keys(question).sort()).toEqual(["boxName", "canDelete", "_id", "_creationTime", "boxId", "receiverUserId", "content", "visibility", "status", "createdAt", "updatedAt"].sort());
   await expect(stranger.mutation(api.answers.create, { questionId: question._id, content: "wrong owner" })).rejects.toThrow("NOT_FOUND");
   await owner.mutation(api.questions.setVisibility, { questionId: question._id, visibility: "public" });
   expect((await unanswered()).page.some(row => row.id === question._id)).toBe(true);

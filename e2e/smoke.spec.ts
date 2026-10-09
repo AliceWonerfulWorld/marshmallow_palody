@@ -58,7 +58,7 @@ for (const width of [320, 375, 390, 430, 1440]) {
         await expect(page.getByLabel("公開モード")).toHaveValue("approval");
       }
       if (name === "inbox") {
-        const activeFilter = page.locator('button[aria-pressed="true"]');
+        const activeFilter = page.locator('[aria-label="質問の絞り込み"] button[aria-pressed="true"]');
         await activeFilter.hover();
         const contrast = await activeFilter.evaluate(async node => {
           await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
