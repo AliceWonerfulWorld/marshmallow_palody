@@ -6,11 +6,13 @@ import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import type { Doc, Id } from "../../convex/_generated/dataModel";
 
-export function Inbox() {
+export function Inbox({ initialBoxId }: { initialBoxId?: string }) {
   const { isAuthenticated } = useConvexAuth();
   const user = useQuery(api.users.current, isAuthenticated ? {} : "skip");
   const boxes = useQuery(api.boxes.listMine, user ? {} : "skip");
-  const [boxId, setBoxId] = useState<Id<"questionBoxes"> | undefined>();
+  const [selectedBoxId, setBoxId] = useState<string | undefined>(initialBoxId);
+  // Only send IDs confirmed by the authenticated box list to the query.
+  const boxId = boxes?.personal && boxes.personal._id === selectedBoxId ? boxes.personal._id : boxes?.shared.find(({ box }) => box._id === selectedBoxId)?.box._id;
   const [filter, setFilter] = useState<"unanswered" | "answered">("unanswered");
   const [limit, setLimit] = useState(20);
   // Subscribe to one growing window, so updates cannot move rows between

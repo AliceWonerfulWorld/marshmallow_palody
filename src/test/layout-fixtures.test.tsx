@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { getFunctionName } from "convex/server";
 import { expect, it, vi } from "vitest";
 import { Header } from "@/components/header";
+import { ShareButton } from "@/components/share-button";
 import { ProfileHeader } from "@/components/profile-header";
 import { QuestionComposer } from "@/components/question-composer";
 import { QuestionFeed } from "@/components/question-feed";
@@ -61,6 +62,9 @@ it("実コンポーネントの長文・QR・回答/削除・設定・各状態�
     cleanup();
   }
   const boxId = "box" as Id<"questionBoxes">;
+  capture("shared-public", <main className="space-y-6 p-4 sm:p-6"><header className="card space-y-3"><h1 className="break-words text-2xl font-bold">{sharedBox.name}</h1><p className="whitespace-pre-wrap break-words">{sharedBox.description}</p><ShareButton slug={sharedBox.slug} name={sharedBox.name} /></header><QuestionComposer boxId={boxId} /><QuestionFeed boxId={boxId} /></main>, () => {
+    fireEvent.click(screen.getByRole("button", { name: "QRコードを表示" }));
+  });
   const publicPage = <main className="space-y-6 p-4 sm:p-6"><ProfileHeader profile={{ username: "owner", displayName: "長い表示名".repeat(12), bio: longText }} /><QuestionComposer boxId={boxId} /><QuestionFeed boxId={boxId} /></main>;
   capture("public", publicPage, () => {
     fireEvent.click(screen.getByRole("button", { name: "QRコードを表示" }));

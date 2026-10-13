@@ -95,3 +95,13 @@ export const updateShared = mutation({
     await ctx.db.patch(box._id, { ...metadata, visibilityMode: args.visibilityMode, updatedAt: Date.now() });
   },
 });
+
+// Public identity is the box itself; never return its owner or memberships.
+export const publicBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const box = await ctx.db.query("questionBoxes").withIndex("by_slug", q => q.eq("slug", slug)).unique();
+    if (!box || isPersonalBox(box)) return null;
+    return { id: box._id, name: box.name, slug: box.slug, description: box.description, visibilityMode: box.visibilityMode };
+  },
+});
