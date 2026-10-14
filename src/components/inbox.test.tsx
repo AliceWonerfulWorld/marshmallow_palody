@@ -47,3 +47,8 @@ it("もっと読むは同じwindowを拡大し、filter変更時は20件へ戻�
   fireEvent.click(screen.getByRole("button", { name: "回答済み" }));
   expect(state.paginated.mock.lastCall?.[1]).toMatchObject({ status: "answered", paginationOpts: { numItems: 20, cursor: null } });
 });
+it("一覧からのboxIdを認可済み箱一覧で確認して初期filterへ適用する", () => {
+  render(<Inbox initialBoxId="shared" />);
+  expect(screen.getByRole("button", { name: "部会質問箱" })).toHaveAttribute("aria-pressed", "true");
+  expect(state.paginated.mock.lastCall?.[1]).toMatchObject({ boxId: "shared" });
+});

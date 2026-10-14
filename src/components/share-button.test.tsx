@@ -57,3 +57,21 @@ it("QRへ同じURLとquiet zoneを渡し閉じるとfocusが戻る", () => {
   expect(screen.queryByRole("region", { name: "質問箱のQRコード" })).not.toBeInTheDocument();
   expect(trigger).toHaveFocus();
 });
+it("共有箱は箱名でWeb Shareし、質問募集URLをQRへ渡しEscapeでfocusを戻す", async () => {
+  const share = vi.fn().mockResolvedValue(undefined);
+  vi.stubGlobal("navigator", { share, clipboard: { writeText: copy } });
+  render(<ShareButton slug="bukai" name="部会質問箱" />);
+  fireEvent.click(screen.getByRole("button", { name: "共有する" }));
+  await waitFor(() => expect(share).toHaveBeenCalledWith({ title: "部会質問箱", url: "https://questions.example/b/bukai" }));
+  const trigger = screen.getByRole("button", { name: "QRコードを表示" });
+  fireEvent.click(trigger);
+  expect(qr).toHaveBeenCalledWith(expect.objectContaining({ value: "https://questions.example/b/bukai" }));
+  fireEvent.keyDown(screen.getByRole("button", { name: "閉じる" }), { key: "Escape" });
+  expect(trigger).toHaveFocus();
+  expect(screen.queryByRole("region")).not.toBeInTheDocument();
+});
+it("共有箱もWeb Share非対応時に公開URLをコピー", async () => {
+  render(<ShareButton slug="bukai" name="部会質問箱" />);
+  fireEvent.click(screen.getByRole("button", { name: "共有する" }));
+  await waitFor(() => expect(copy).toHaveBeenCalledWith("https://questions.example/b/bukai"));
+});

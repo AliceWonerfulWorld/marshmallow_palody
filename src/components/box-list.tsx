@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useConvexAuth, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { ShareButton } from "./share-button";
 import { boxModeLabels } from "./shared-box-form";
 
 export function BoxList() {
@@ -33,13 +34,13 @@ export function BoxList() {
           {box.description && <p className="whitespace-pre-wrap">{box.description}</p>}
           <p className="metadata">{boxModeLabels[box.visibilityMode]}</p>
           <div className="flex flex-wrap gap-2">
-            {/* These destinations are enabled as their features ship in #32–#33. */}
-            <button type="button" disabled title="準備中">公開ページを開く</button>
-            <button type="button" disabled title="準備中">Inboxでこの箱を見る</button>
+            <Link className="button" href={`/b/${box.slug}`}>公開ページを開く</Link>
+            <Link className="button" href={`/inbox?boxId=${box._id}`} prefetch={false}>Inboxでこの箱を見る</Link>
             <Link className="button" href={`/boxes/${box._id}/members`} prefetch={false}>メンバーを見る</Link>
             {role === "owner" && <Link className="button" href={`/boxes/${box._id}/settings`} prefetch={false}>設定</Link>}
           </div>
-          <p className="metadata">公開ページ・共有Inboxは準備中です。</p>
+          <p className="metadata">質問募集用の公開URLです。メンバー参加用の招待はメンバー管理画面で行います。</p>
+          <ShareButton slug={box.slug!} name={box.name!} />
         </article>)}
       </section>
     </>}

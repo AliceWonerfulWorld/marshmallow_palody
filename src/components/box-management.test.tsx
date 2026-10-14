@@ -24,11 +24,13 @@ beforeEach(() => { state.role = "owner"; state.ready = true; state.empty = false
 
 it("個人URL・共有metadata・roleを表示し、設定導線はOwnerのみ", () => {
   const { rerender } = render(<BoxList />);
-  expect(screen.getByRole("link", { name: "公開ページを開く" })).toHaveAttribute("href", "/u/alice");
+  expect(screen.getAllByRole("link", { name: "公開ページを開く" })[0]).toHaveAttribute("href", "/u/alice");
   expect(screen.getByRole("link", { name: "設定" })).toHaveAttribute("href", "/boxes/shared/settings");
   expect(screen.getByText("Owner")).toBeVisible();
   expect(screen.getByText("みんなで管理")).toBeVisible();
   expect(screen.getByText("/b/bukai")).toBeVisible();
+  expect(screen.getAllByRole("link", { name: "公開ページを開く" })[1]).toHaveAttribute("href", "/b/bukai");
+  expect(screen.getByRole("link", { name: "Inboxでこの箱を見る" })).toHaveAttribute("href", "/inbox?boxId=shared");
   state.role = "member";
   rerender(<BoxList />);
   expect(screen.getByText("Member")).toBeVisible();

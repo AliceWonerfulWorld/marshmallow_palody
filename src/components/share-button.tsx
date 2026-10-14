@@ -7,9 +7,11 @@ const subscribe = () => () => {};
 const getOrigin = () => window.location.origin;
 const getServerOrigin = () => "";
 
-export function ShareButton({ username }: { username: string }) {
+type ShareTarget = { username: string; slug?: never; name?: never } | { username?: never; slug: string; name: string };
+
+export function ShareButton({ username, slug, name }: ShareTarget) {
   const origin = useSyncExternalStore(subscribe, getOrigin, getServerOrigin);
-  const url = origin ? `${origin}/u/${encodeURIComponent(username)}` : "";
+  const url = origin ? `${origin}/${slug !== undefined ? "b" : "u"}/${encodeURIComponent(slug ?? username!)}` : "";
   const [message, setMessage] = useState("");
   const [qrOpen, setQrOpen] = useState(false);
   const qrTrigger = useRef<HTMLButtonElement>(null);
@@ -26,7 +28,7 @@ export function ShareButton({ username }: { username: string }) {
   async function share() {
     if (!navigator.share) { await copy(); return; }
     try {
-      await navigator.share({ title: "匿名で質問を送る", url });
+      await navigator.share({ title: name ?? "匿名で質問を送る", url });
       setMessage("共有しました。");
     } catch (error) {
       if (typeof error === "object" && error !== null && "name" in error && error.name === "AbortError") {
