@@ -7,7 +7,9 @@
     "node": ">=22.12.0 <23 || >=24.0.0 <25 || >=26.0.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "convex dev --start \"npm run dev:frontend\"",
+    "dev:frontend": "next dev",
+    "dev:backend": "convex dev",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",

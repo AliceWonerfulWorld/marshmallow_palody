@@ -10,6 +10,12 @@ Node.js 22.12以上の22系、または24系・26以上とnpmを使用します�
 ```bash
 npm install
 cp .env.example .env.local
+npm run dev:frontend # 外部サービス未設定での画面確認
+```
+
+Clerk・Convexの初回設定（次節）が済んでいれば、普段の開発は次の1コマンドで両方起動できます。
+
+```bash
 npm run dev
 ```
 
@@ -21,7 +27,7 @@ npm run dev
 2. Clerk DashboardのIntegrationsからConvex連携を有効化します。JWTテンプレートを使う構成では、Convex用テンプレートの名前を `convex`、audienceを `convex` にします。公開プロフィール用に `name: {{user.full_name}}`、`preferred_username: {{user.username}}`、`picture: {{user.image_url}}` のclaimを設定します。ユーザー名・氏名がない場合も同期でき、メールはUserに保存しません。設定の最新手順は [Convex公式Clerk統合ガイド](https://docs.convex.dev/auth/clerk) を参照してください。
 3. ClerkのFrontend API URL（`https://….clerk.accounts.dev` など）をコピーし、Convex Dashboardの開発デプロイメントの環境変数に `CLERK_JWT_ISSUER_DOMAIN` として設定します。`.env.example` にも変数名を記載していますが、**Next.jsの `.env.local` だけに設定してもConvexには反映されません**。
 4. プロジェクトルートで `npx convex dev` を実行してログインし、開発プロジェクトを選択・作成します。初回に環境変数未設定のエラーが出る場合は手順3の設定後に再実行します。CLIが設定する `NEXT_PUBLIC_CONVEX_URL` と `CONVEX_DEPLOYMENT` を `.env.local` に保持します。全schema・関数・auth設定が正常に同期されたことを確認します。
-5. `npx convex dev` を起動したまま、別ターミナルで `npm run dev` を実行します。本番ではClerk本番instanceに対応するissuerをConvex本番デプロイメントに設定し、Next.js側にも本番のキーとConvex URLを設定します。開発・本番のissuerを混在させないでください。
+5. 初回設定が完了したら `npx convex dev` をCtrl+Cで終了し、以降は `npm run dev` でNext.jsとConvexを1つのターミナルから起動します。Convexの同期が成功してからNext.jsが起動し、Ctrl+Cで両方停止します。フロントだけ起動する場合は `npm run dev:frontend`、Convexだけ起動する場合は `npm run dev:backend` を使います。本番ではClerk本番instanceに対応するissuerをConvex本番デプロイメントに設定し、Next.js側にも本番のキーとConvex URLを設定します。開発・本番のissuerを混在させないでください。
 
 `.env.local` などの環境変数ファイルはGitの対象外です。`.env.example` には変数名と用途のみを記載し、秘密値をコミットしないでください。
 
