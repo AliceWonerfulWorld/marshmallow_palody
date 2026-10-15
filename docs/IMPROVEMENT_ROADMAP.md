@@ -1,6 +1,6 @@
 # 改善ロードマップ
 
-2026-10-14。対象HEAD `71d31d14a02b995017948efb227551547e003795`。GitHub登録は今回行わない。候補21件は元IDで追跡し、実番号/URLは未登録とする。既存Issueは実番号/URLを利用。[精査結果](PRODUCT_IMPROVEMENTS_REVIEWED.md)、[Issue本文](GITHUB_ISSUES.md)。
+2026-10-14。対象HEAD `71d31d14a02b995017948efb227551547e003795`。2026-10-15に全Open/Closed 26件の本文・目的・受け入れ条件を再照合し、候補21件をHigh→Medium→Lowの順に登録した（Critical候補なし）。元IDと実番号/URLで追跡する。既存Issueは実番号/URLを利用。[精査結果](PRODUCT_IMPROVEMENTS_REVIEWED.md)、[Issue本文](GITHUB_ISSUES.md)。
 
 Phaseは作業目的の分類であり、全項目を順番待ちにする意味ではない。最優先はSEC-001/UX-002/UX-001/BE-001/既存#34。#34/#25のベースライン確認とPhase 1の調査は早期開始し、最終受け入れは対象修正後。需要検証は並行開始できるが追加機能実装は採用後。
 
@@ -10,9 +10,9 @@ Phaseは作業目的の分類であり、全項目を順番待ちにする意味
 
 | 推奨順 | 対応Issue / 元ID | GitHub番号・URL | 優先度 / 工数 | 依存・調整 | 完了条件 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [SEC-001: [Security] 匿名clientIdを替える連投への防御を追加する](GITHUB_ISSUES.md#sec-001) | 未登録 | High / L | なし | Nextを経由しないConvex呼出しも証明なし/不正証明なら拒否する |
-| 2 | [SEC-002: [Security] lint依存のbraces脆弱性を追跡する](GITHUB_ISSUES.md#sec-002) | 未登録 | Medium / S | なし | 警告5件を同一原因として管理し、本番API重大脆弱性5件と報告しない |
-| 3 | [SEC-003: [Security] 招待URLの外部ログ記録と保持設定を検証する](GITHUB_ISSUES.md#sec-003) | 未登録 | Medium / M | なし | 各ログ経路についてraw token記録の有無、アクセス権、保持期間を結果表に残す |
+| 1 | [SEC-001: [Security] 匿名clientIdを替える連投への防御を追加する](GITHUB_ISSUES.md#sec-001) | [#42](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/42) | High / L | なし | Nextを経由しないConvex呼出しも証明なし/不正証明なら拒否する |
+| 2 | [SEC-002: [Security] lint依存のbraces脆弱性を追跡する](GITHUB_ISSUES.md#sec-002) | [#46](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/46) | Medium / S | なし | 警告5件を同一原因として管理し、本番API重大脆弱性5件と報告しない |
+| 3 | [SEC-003: [Security] 招待URLの外部ログ記録と保持設定を検証する](GITHUB_ISSUES.md#sec-003) | [#47](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/47) | Medium / M | なし | 各ログ経路についてraw token記録の有無、アクセス権、保持期間を結果表に残す |
 
 Phase全体の完了条件: 直接Convex投稿の追加防御が検査済み、匿名正規利用が可能。依存警告は解消または期限付き例外管理。招待ログ経路の結果/未確認が明確で、発見した漏洩は別修正の投入判断へ反映。
 
@@ -22,14 +22,14 @@ Phase全体の完了条件: 直接Convex投稿の追加防御が検査済み、�
 
 | 推奨順 | 対応Issue / 元ID | GitHub番号・URL | 優先度 / 工数 | 依存・調整 | 完了条件 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [UX-002: [UI/UX] 投稿前に現在の公開モードと共有メンバーの閲覧範囲を明示する](GITHUB_ISSUES.md#ux-002) | 未登録 | High / S | なし | 全6組合せで現在モードと未回答質問を読める人が送信前に分かる |
-| 2 | [UX-001: [UI/UX] 回答済みInboxから非公開の回答も確認できるようにする](GITHUB_ISSUES.md#ux-001) | 未登録 | High / M | なし | 個人Ownerと共有Owner/Memberはprivateを含む回答本文を確認できる |
-| 3 | [BE-001: [Backend] 公開Q&Aを回答日時順にする](GITHUB_ISSUES.md#be-001) | 未登録 | High / M | なし | A→Bの投稿、B→Aの回答でA→Bの公開順になる |
-| 4 | [FE-001: [Frontend] ユーザー同期の準備状態を画面全体で共有する](GITHUB_ISSUES.md#fe-001) | 未登録 | Medium / M | なし | 同期失敗時は通常loadingと区別した説明/再試行を対象画面に表示する |
-| 5 | [FE-002: [Frontend] 共有設定の競合更新と古いフォーム値を扱う](GITHUB_ISSUES.md#fe-002) | 未登録 | Medium / M | なし | Aがモード変更後、古いBが名前変更を保存してもAのモードを無言で戻さない |
-| 6 | [UX-003: [UI/UX] 無効な箱フィルターを全箱表示へ黙って置換しない](GITHUB_ISSUES.md#ux-003) | 未登録 | Medium / M | なし | 指定IDが不正/未認可/参加解除なら別箱質問を自動表示しない |
-| 7 | [AX-001: [Accessibility] 回答・削除確認の表示と消失にフォーカス管理を加える](GITHUB_ISSUES.md#ax-001) | 未登録 | Medium / M | なし | 回答/質問削除/Member削除/取消をキーボードだけで完了できる |
-| 8 | [AX-002: [Accessibility] 入力エラーを対象フィールドと関連付ける](GITHUB_ISSUES.md#ax-002) | 未登録 | Medium / M | なし | slug重複はslug、名前空白はname、本文上限超過は対象textareaと関連する |
+| 1 | [UX-002: [UI/UX] 投稿前に現在の公開モードと共有メンバーの閲覧範囲を明示する](GITHUB_ISSUES.md#ux-002) | [#43](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/43) | High / S | なし | 全6組合せで現在モードと未回答質問を読める人が送信前に分かる |
+| 2 | [UX-001: [UI/UX] 回答済みInboxから非公開の回答も確認できるようにする](GITHUB_ISSUES.md#ux-001) | [#44](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/44) | High / M | なし | 個人Ownerと共有Owner/Memberはprivateを含む回答本文を確認できる |
+| 3 | [BE-001: [Backend] 公開Q&Aを回答日時順にする](GITHUB_ISSUES.md#be-001) | [#45](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/45) | High / M | なし | A→Bの投稿、B→Aの回答でA→Bの公開順になる |
+| 4 | [FE-001: [Frontend] ユーザー同期の準備状態を画面全体で共有する](GITHUB_ISSUES.md#fe-001) | [#48](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/48) | Medium / M | なし | 同期失敗時は通常loadingと区別した説明/再試行を対象画面に表示する |
+| 5 | [FE-002: [Frontend] 共有設定の競合更新と古いフォーム値を扱う](GITHUB_ISSUES.md#fe-002) | [#49](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/49) | Medium / M | なし | Aがモード変更後、古いBが名前変更を保存してもAのモードを無言で戻さない |
+| 6 | [UX-003: [UI/UX] 無効な箱フィルターを全箱表示へ黙って置換しない](GITHUB_ISSUES.md#ux-003) | [#50](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/50) | Medium / M | なし | 指定IDが不正/未認可/参加解除なら別箱質問を自動表示しない |
+| 7 | [AX-001: [Accessibility] 回答・削除確認の表示と消失にフォーカス管理を加える](GITHUB_ISSUES.md#ax-001) | [#51](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/51) | Medium / M | なし | 回答/質問削除/Member削除/取消をキーボードだけで完了できる |
+| 8 | [AX-002: [Accessibility] 入力エラーを対象フィールドと関連付ける](GITHUB_ISSUES.md#ax-002) | [#52](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/52) | Medium / M | なし | slug重複はslug、名前空白はname、本文上限超過は対象textareaと関連する |
 | 既存・早期着手/修正後再検査 | MT-001・MT-002を集約した共有受け入れ/Docs同期 | [#34](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/34)（Open） | High / L（実接続含む補足範囲の概算） | #29〜33はClosed。各主要修正後に最終再検査 | 個人/共有/招待/role/private/参加解除の実通信結果と現行文書が揃う |
 | #34と連携して最終判定 | MT-001の公開テスト投入判定 | [#25](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/25)（Open） | High / L（実機検査を含む概算） | 既存#22〜24はClosed、#34の共有検証と連携 | 部会試用投入可否を記録し、正式Production判定と分ける |
 
@@ -41,11 +41,11 @@ Phase全体の完了条件: 6種類の公開説明、private回答の認可済�
 
 | 推奨順 | 対応Issue / 元ID | GitHub番号・URL | 優先度 / 工数 | 依存・調整 | 完了条件 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [BE-002: [Backend] 期限切れレート制限・招待の保持期限を定める](GITHUB_ISSUES.md#be-002) | 未登録 | Medium / M | なし | 期限内の制限・pending招待を削除しない |
-| 2 | [PERF-001: [Performance] Inboxの増大windowと全箱ファンアウトを制限する](GITHUB_ISSUES.md#perf-001) | 未登録 | Medium / L | UX-001 | 上限超過・非整数・非正値の直接呼出しを明示的に拒否/正規化する |
-| 3 | [PERF-002: [Performance] 箱・メンバー・招待の一覧取得をページ化する](GITHUB_ISSUES.md#perf-002) | 未登録 | Medium / L | なし（UX-003と箱選択契約を調整） | 1000箱/membership・1000Member・1000招待fixtureで1応答が設定上限以下となる |
-| 4 | [MT-003: [Operations] 障害通知・DB復元演習の運用手順を整備する](GITHUB_ISSUES.md#mt-003) | 未登録 | Medium / L | SEC-003 | 検知→切り分け→復旧の担当と手順、目標RPO/RTOを記録する |
-| 5 | [AX-003: [Accessibility] WCAGの検証範囲を自動・手動の両方で広げる](GITHUB_ISSUES.md#ax-003) | 未登録 | Medium / M | AX-001、AX-002 | 対象画面とloading/error/form展開状態の自動検査結果を記録する |
+| 1 | [BE-002: [Backend] 期限切れレート制限・招待の保持期限を定める](GITHUB_ISSUES.md#be-002) | [#53](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/53) | Medium / M | なし | 期限内の制限・pending招待を削除しない |
+| 2 | [PERF-001: [Performance] Inboxの増大windowと全箱ファンアウトを制限する](GITHUB_ISSUES.md#perf-001) | [#54](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/54) | Medium / L | UX-001 | 上限超過・非整数・非正値の直接呼出しを明示的に拒否/正規化する |
+| 3 | [PERF-002: [Performance] 箱・メンバー・招待の一覧取得をページ化する](GITHUB_ISSUES.md#perf-002) | [#55](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/55) | Medium / L | なし（UX-003と箱選択契約を調整） | 1000箱/membership・1000Member・1000招待fixtureで1応答が設定上限以下となる |
+| 4 | [MT-003: [Operations] 障害通知・DB復元演習の運用手順を整備する](GITHUB_ISSUES.md#mt-003) | [#56](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/56) | Medium / L | SEC-003 | 検知→切り分け→復旧の担当と手順、目標RPO/RTOを記録する |
+| 5 | [AX-003: [Accessibility] WCAGの検証範囲を自動・手動の両方で広げる](GITHUB_ISSUES.md#ax-003) | [#57](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/57) | Medium / M | AX-001、AX-002 | 対象画面とloading/error/form展開状態の自動検査結果を記録する |
 
 Phase全体の完了条件: 期限データを安全な有限バッチで扱い、代表規模の一覧/Inboxが決めた予算内。復旧演習と対象a11y検査の証跡があり、認可/同時更新/参加解除の回帰を維持する。
 
@@ -55,11 +55,11 @@ Phase全体の完了条件: 期限データを安全な有限バッチで扱い�
 
 | 推奨順 | 対応Issue / 元ID | GitHub番号・URL | 優先度 / 工数 | 依存・調整 | 完了条件 |
 | --- | --- | --- | --- | --- | --- |
-| 1 | [BE-003: [Backend] 共有操作の追跡に必要な監査情報を残す](GITHUB_ISSUES.md#be-003) | 未登録 | Medium / L | なし | 公開変更・質問削除・箱設定変更の成功イベントをOwnerだけが取得できる |
-| 2 | [PV-001: [Product] イベントの受付終了・アーカイブ需要と採否を決める](GITHUB_ISSUES.md#pv-001) | 未登録 | Low / M | なし | 対象者3組以上の匿名化した結果と採用/保留/不採用理由がある |
-| 3 | [PV-002: [Product] 本人退出・Owner移譲の需要と運用方針を決める](GITHUB_ISSUES.md#pv-002) | 未登録 | Low / L | なし | 本人退出/移譲それぞれの採否と理由を記録する |
-| 4 | [PV-003: [Product] ターゲット別の成功指標を設定して価値を検証する](GITHUB_ISSUES.md#pv-003) | 未登録 | Low / M | なし | 測定定義・目標値・期間・担当・外部計測との役割を記録する |
-| 5 | [FE-003: [Frontend] 反復する管理操作のfeedbackを小さく共通化する](GITHUB_ISSUES.md#fe-003) | 未登録 | Low / M | FE-001 | 既存の失敗時入力保持/二重送信防止/role制約/公開警告を維持する |
+| 1 | [BE-003: [Backend] 共有操作の追跡に必要な監査情報を残す](GITHUB_ISSUES.md#be-003) | [#58](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/58) | Medium / L | なし | 公開変更・質問削除・箱設定変更の成功イベントをOwnerだけが取得できる |
+| 2 | [PV-001: [Product] イベントの受付終了・アーカイブ需要と採否を決める](GITHUB_ISSUES.md#pv-001) | [#59](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/59) | Low / M | なし | 対象者3組以上の匿名化した結果と採用/保留/不採用理由がある |
+| 3 | [PV-002: [Product] 本人退出・Owner移譲の需要と運用方針を決める](GITHUB_ISSUES.md#pv-002) | [#60](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/60) | Low / L | なし | 本人退出/移譲それぞれの採否と理由を記録する |
+| 4 | [PV-003: [Product] ターゲット別の成功指標を設定して価値を検証する](GITHUB_ISSUES.md#pv-003) | [#61](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/61) | Low / M | なし | 測定定義・目標値・期間・担当・外部計測との役割を記録する |
+| 5 | [FE-003: [Frontend] 反復する管理操作のfeedbackを小さく共通化する](GITHUB_ISSUES.md#fe-003) | [#62](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/62) | Low / M | FE-001 | 既存の失敗時入力保持/二重送信防止/role制約/公開警告を維持する |
 
 Phase全体の完了条件: BE-003採用時はOwner限定最小監査と保持が動作。PV各調査は採否と理由を記録し、採用時は別実装Issueに分割する。FE-003はFE-001後に既存feedback契約を壊さず反復を整理する。
 
@@ -71,6 +71,6 @@ UX-001 → PERF-001（回答join込みの計測）、SEC-003 → MT-003（監視
 
 ## 登録・再実行時の追跡
 
-今回は全候補が未登録であり番号を割り振らない。将来登録時は全Open/Closed本文を再取得し、目的・元ID・完了条件が一致すれば既存を再利用する。MT-001/002を独立新規Issueにしない。登録した実番号/URLをこの表とIssue準備書に反映し、関連Issueへ逆参照を追加する。Closedを再開するかは解決履歴と現行証拠を確認して判断する。
+全候補21件を登録済み。登録失敗なし。関連Issueの本文へ相互参照を追加済み。再実行時は全Open/Closed本文を再取得し、目的・元ID・完了条件が一致すれば既存を再利用する。MT-001/002を独立新規Issueにしない。実番号/URLをこの表とIssue準備書で維持し、関連Issueの相互参照も確認する。Closedを再開するかは解決履歴と現行証拠を確認して判断する。
 
 日程は固定しない。S=数時間、M=半日〜1日、L=2〜3日の概算で、外部調査/ユーザー調査待ちやmigrationの設計次第で延びる。Phase 4のLow調査/任意整理はHigh/Mediumの完了を妨げない。

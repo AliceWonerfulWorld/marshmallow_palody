@@ -1,12 +1,12 @@
 # GitHub Issue登録準備一覧
 
-検証日: 2026-10-14（Asia/Tokyo）。対象commit: `71d31d14a02b995017948efb227551547e003795`。新規登録候補21件（Confirmed 10、Enhancement 10、検証専用1）。**GitHub上への登録・編集・コメントは実施していない。**
+検証日: 2026-10-14（Asia/Tokyo）。対象commit: `71d31d14a02b995017948efb227551547e003795`。新規登録候補21件（Confirmed 10、Enhancement 10、検証専用1）。**2026-10-15登録完了: 21件（#42〜#62）。登録前に全Open/Closed 26件のタイトル・本文・受け入れ条件を再照合し、High→Medium→Lowの順に作成した。Critical候補なし。既存ラベルのみ使用し、関連Issueの本文へ相互参照を追加した。登録失敗なし。**
 
 Open/Closed全26件のタイトル・本文・受け入れ条件を照合した。MT-001/MT-002はOpen #34（実利用フロー/Docs同期）および#25（公開環境受け入れ）に集約し、新規作成しない。Closedは「関連」と「重複」を区別した。#7は最低限clientId制限を対象とし追加防御を将来対応にしているためSEC-001は重複ではない。#30は競合制御、#32はprivate回答本文閲覧、#5は逆順回答ページングの改善目的を満たさないため、残存課題を新規候補にする。
 
 既存ラベル: `accessibility`, `bug`, `documentation`, `duplicate`, `enhancement`, `good first issue`, `help wanted`, `invalid`, `question`, `wontfix`。下記はこの集合だけを使う。優先度・security/testing/refactorは本文メタデータで表し、新ラベルを作らない。
 
-登録時はこのIDを本文へ残し、再度全Open/Closed本文を照合する。同じ目的・元ID・受け入れ条件が既にあれば再利用し、番号/URLを本書とロードマップに反映する。候補IDはGitHub番号ではない。関連Issueへの逆参照は登録後に行う作業であり、今回は下記の関連リンクと既存Issue向け追記案のみ用意した。
+登録時はこのIDを本文へ残し、再度全Open/Closed本文を照合する。同じ目的・元ID・受け入れ条件が既にあれば再利用し、番号/URLを本書とロードマップに反映する。候補IDはGitHub番号ではない。関連Issueへの逆参照は登録後に本文へ追加済み。下記の既存Issue向け補足も#34/#25へ反映済み。
 
 ## 登録順・候補一覧
 
@@ -40,7 +40,7 @@ Open/Closed全26件のタイトル・本文・受け入れ条件を照合した�
 
 ## SEC-001: [Security] 匿名clientIdを替える連投への防御を追加する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#42](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/42)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -101,7 +101,7 @@ convex/questions.test.tsでAPI直接呼出しとID切替をfixtureで実行す�
 
 ## UX-002: [UI/UX] 投稿前に現在の公開モードと共有メンバーの閲覧範囲を明示する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#43](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/43)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -161,7 +161,7 @@ question-composer.test.tsxと公開routeテストで6組合せとモード更新
 
 ## UX-001: [UI/UX] 回答済みInboxから非公開の回答も確認できるようにする
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#44](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/44)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -220,7 +220,7 @@ convex/shared-inbox.test.tsとsrc/components/inbox.test.tsxで回答→非公開
 
 ## BE-001: [Backend] 公開Q&Aを回答日時順にする
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#45](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/45)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -280,7 +280,7 @@ convex/answers.test.tsに時刻制御した逆順回答と2ページ以上のケ
 
 ## SEC-002: [Security] lint依存のbraces脆弱性を追跡する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#46](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/46)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -342,7 +342,7 @@ npm audit --jsonとnpm ls braces --allで比較。依存変更時のみlint/type
 
 ## SEC-003: [Security] 招待URLの外部ログ記録と保持設定を検証する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#47](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/47)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -402,7 +402,7 @@ npm audit --jsonとnpm ls braces --allで比較。依存変更時のみlint/type
 
 ## FE-001: [Frontend] ユーザー同期の準備状態を画面全体で共有する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#48](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/48)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -461,7 +461,7 @@ user-sync.test.tsxとowner画面のmocked Reactテストでupsert失敗/遅延/�
 
 ## FE-002: [Frontend] 共有設定の競合更新と古いフォーム値を扱う
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#49](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/49)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -520,7 +520,7 @@ convex/box-management.test.tsで同じ版を読む2保存の競合、Reactテス
 
 ## UX-003: [UI/UX] 無効な箱フィルターを全箱表示へ黙って置換しない
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#50](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/50)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -579,7 +579,7 @@ inbox.test.tsxでboxes undefined→取得、不正ID、選択箱消失、URL変�
 
 ## AX-001: [Accessibility] 回答・削除確認の表示と消失にフォーカス管理を加える
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#51](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/51)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -638,7 +638,7 @@ ReactでactiveElementを検査し、実ブラウザでTab/Shift+Tab/取消/リ�
 
 ## AX-002: [Accessibility] 入力エラーを対象フィールドと関連付ける
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#52](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/52)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -698,7 +698,7 @@ box-management/question-composer/answer-formテストでaria-describedby参照�
 
 ## BE-002: [Backend] 期限切れレート制限・招待の保持期限を定める
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#53](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/53)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -758,7 +758,7 @@ fake clockで期限境界とバッチ続行を検査。invitations.test.tsのacc
 
 ## PERF-001: [Performance] Inboxの増大windowと全箱ファンアウトを制限する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#54](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/54)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -819,7 +819,7 @@ shared-inbox.test.tsの69/86/99行のケースを維持。隔離fixtureで基準
 
 ## PERF-002: [Performance] 箱・メンバー・招待の一覧取得をページ化する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#55](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/55)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -879,7 +879,7 @@ boxes/invitationsテストで固定fixtureとcursor traversalを検査し、box-
 
 ## MT-003: [Operations] 障害通知・DB復元演習の運用手順を整備する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#56](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/56)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -939,7 +939,7 @@ deploymentには環境分離とfrontend rollbackがあり、完全な運用手�
 
 ## AX-003: [Accessibility] WCAGの検証範囲を自動・手動の両方で広げる
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#57](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/57)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -999,7 +999,7 @@ e2e/smoke.spec.tsの実markup fixtureと隔離実接続の画面で検査し、m
 
 ## BE-003: [Backend] 共有操作の追跡に必要な監査情報を残す
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#58](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/58)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -1059,7 +1059,7 @@ Convexテストで操作とeventの整合性、Member/非参加者拒否、機�
 
 ## PV-001: [Product] イベントの受付終了・アーカイブ需要と採否を決める
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#59](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/59)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -1118,7 +1118,7 @@ schemaに受付終了属性がなくsubmitは存在する箱へ投稿できる�
 
 ## PV-002: [Product] 本人退出・Owner移譲の需要と運用方針を決める
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#60](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/60)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -1178,7 +1178,7 @@ removeMemberはOwner自身削除を拒否し、本人退出/Owner移譲APIはな
 
 ## PV-003: [Product] ターゲット別の成功指標を設定して価値を検証する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#61](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/61)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -1238,7 +1238,7 @@ removeMemberはOwner自身削除を拒否し、本人退出/Owner移譲APIはな
 
 ## FE-003: [Frontend] 反復する管理操作のfeedbackを小さく共通化する
 
-登録状態: 未登録。以下の「概要」以降を本文として使用する。
+登録状態: 登録済み [#62](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/62)。以下の「概要」以降を登録本文として使用した。
 
 ### 概要
 
@@ -1291,19 +1291,48 @@ FE-001完了後に残る操作feedback反復だけを棚卸しする。同じ契
 - Phase: 4
 
 
-## 新規作成しない項目と既存Issueへの追記案
+## 新規作成しない項目と既存Issueへの追記内容
 
 ### MT-001 / MT-002 → 既存 #34・#25
 
-主担当: [#34](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/34)（Open）。公開テスト判定は[#25](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/25)（Open）。判定Duplicateは問題解決を意味しない。以下は既存Issueへの追記案であり、今回は送信していない。
+主担当: [#34](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/34)（Open）。公開テスト判定は[#25](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/25)（Open）。判定Duplicateは問題解決を意味しない。以下は既存Issueへの追記内容であり、2026-10-15に#34/#25の本文へ追記済み。
 
 - [ ] 個人/共有のOwner・Member・非参加者・匿名の通し検証を、Clerk JWTとConvexへ実通信する隔離環境で行う。commit、実施日時、環境、端末、操作結果と未確認範囲を秘匿化して記録する。
 - [ ] 招待受諾/失効/期限切れ、private除外、Owner限定削除、Member削除後拒否、箱分離を確認する。keyless smoke/fixtureを実接続成功の証跡として使わない。
 - [ ] product-specの140/142/153行付近の後続実装・無効ボタン記述を現行へ更新し、READMEの存在しないsrc/typesを整理する。acceptanceに共有フローとrole表を追加し、過去検証記録は日時付き履歴として残す。
-- [ ] 本候補のSEC-001/UX-002/UX-001/BE-001等が登録された後、#34/#25と実番号で相互参照し、機能修正後に再検証する。
+- [x] SEC-001（#42）/UX-002（#43）/UX-001（#44）/BE-001（#45）等と#34/#25を実番号で相互参照した。
+- [ ] 関連する機能修正後に再検証する。
 
 受け入れ条件: 個人/共有×各roleの実通信結果、privateと削除後拒否の証跡、現行仕様と手順の一致があり、#25の「試用投入可否」と正式Production判定を区別できる。
 
 ### 重複防止の根拠
 
 [#34](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/34)のScenario A〜IとDocs節、[#25](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/25)のScenario 1〜9を比較して既存追跡を採用した。Closed #18は個人箱受け入れ、Closed #15/#20は一般的UI改善であり、新たな全状態a11y検査（AX-003）と特定のfocus/error関連付け（AX-001/002）の完了証跡ではない。BE-002の保持、BE-003の監査、PVの需要検証、性能上限に同目的の既存Issueは確認できなかった。
+
+## 登録結果（2026-10-15）
+
+全候補21件登録済み。MT-001／MT-002は既存#34・#25を再利用。再実行では本文の元IDだけでなく目的・受け入れ条件を全Open/Closed Issueと照合し、一致するIssueを再利用する。
+
+| 元ID | Issue番号・URL |
+| --- | --- |
+| SEC-001 | [#42](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/42) |
+| UX-002 | [#43](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/43) |
+| UX-001 | [#44](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/44) |
+| BE-001 | [#45](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/45) |
+| SEC-002 | [#46](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/46) |
+| SEC-003 | [#47](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/47) |
+| FE-001 | [#48](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/48) |
+| FE-002 | [#49](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/49) |
+| UX-003 | [#50](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/50) |
+| AX-001 | [#51](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/51) |
+| AX-002 | [#52](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/52) |
+| BE-002 | [#53](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/53) |
+| PERF-001 | [#54](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/54) |
+| PERF-002 | [#55](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/55) |
+| MT-003 | [#56](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/56) |
+| AX-003 | [#57](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/57) |
+| BE-003 | [#58](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/58) |
+| PV-001 | [#59](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/59) |
+| PV-002 | [#60](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/60) |
+| PV-003 | [#61](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/61) |
+| FE-003 | [#62](https://github.com/AliceWonerfulWorld/marshmallow_palody/issues/62) |
