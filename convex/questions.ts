@@ -1,17 +1,23 @@
 import { validatedContent } from "./lib/content";
 import { ConvexError, v } from "convex/values";
 import { paginationOptsValidator } from "convex/server";
-import { visibility, questionStatus } from "./schema";
+import { visibility, visibilityMode, questionStatus } from "./schema";
 import { getPersonalBox, isPersonalBox, requireBoxMember, requireUser, requireManageableQuestion } from "./lib/access";
 import { mutation, query } from "./_generated/server";
 
 export const submit = mutation({
-  args: { boxId: v.id("questionBoxes"), content: v.string(), clientId: v.string() },
+  args: { boxId: v.id("questionBoxes"), content: v.string(), clientId: v.string(), expectedVisibilityMode: v.optional(visibilityMode) },
   handler: async (ctx, args) => {
     const content = validatedContent(args.content, 1000);
     if (!/^[a-zA-Z0-9_-]{16,128}$/.test(args.clientId)) throw new ConvexError("INVALID_CLIENT");
     const box = await ctx.db.get(args.boxId);
     if (!box || !await ctx.db.get(box.ownerUserId)) throw new ConvexError("NOT_FOUND");
+    // Compare and insert in one transaction; stale explanations must not create
+    // a question or consume the anonymous browser's rate-limit allowance.
+    // Optional for compatibility with existing API clients.
+    if (args.expectedVisibilityMode !== undefined && args.expectedVisibilityMode !== box.visibilityMode) {
+      return { visibilityMode: box.visibilityMode };
+    }
     const now = Date.now();
     // Browser IDs are anonymous and resettable; this is a minimal MVP limit.
     const limit = await ctx.db.query("questionRateLimits").withIndex("by_box_client", q => q.eq("boxId", box._id).eq("clientId", args.clientId)).unique();

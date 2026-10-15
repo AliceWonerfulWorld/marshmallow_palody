@@ -6,6 +6,42 @@ import schema from "./schema";
 import { api } from "./_generated/api";
 const modules = import.meta.glob("./**/*.ts");
 
+const postingCases = (["personal", "shared"] as const).flatMap(kind =>
+  (["public", "approval", "private"] as const).map(mode => ({ kind, mode })),
+);
+it.each(postingCases)("$kind / $modeで説明済みのモードが一致すると匿名投稿できる", async ({ kind, mode }) => {
+  const t = convexTest(schema, modules);
+  const owner = t.withIdentity({ subject: "owner" });
+  await owner.mutation(api.users.upsert, {});
+  const boxId = kind === "shared"
+    ? await owner.mutation(api.boxes.createShared, { name: "共有箱", slug: "shared", visibilityMode: mode })
+    : (await owner.query(api.boxes.current, {}))!._id;
+  await t.run(ctx => ctx.db.patch(boxId, { visibilityMode: mode }));
+  const post = { boxId, clientId: "anonymous-client-001", content: "質問", expectedVisibilityMode: mode };
+  expect(await t.mutation(api.questions.submit, post)).toBeNull();
+  const row = await t.run(ctx => ctx.db.query("questions").unique());
+  expect(row).toMatchObject({ boxId, visibility: mode === "public" ? "public" : "private" });
+  expect(Object.keys(row!).sort()).toEqual(["_id", "_creationTime", "boxId", "receiverUserId", "content", "visibility", "status", "createdAt", "updatedAt"].sort());
+});
+
+it.each(postingCases)("$kind / $modeへの変更時は再確認まで保存せずレート枠も消費しない", async ({ kind, mode }) => {
+  const t = convexTest(schema, modules);
+  const owner = t.withIdentity({ subject: "owner" });
+  await owner.mutation(api.users.upsert, {});
+  const boxId = kind === "shared"
+    ? await owner.mutation(api.boxes.createShared, { name: "共有箱", slug: "shared", visibilityMode: mode })
+    : (await owner.query(api.boxes.current, {}))!._id;
+  await t.run(ctx => ctx.db.patch(boxId, { visibilityMode: mode }));
+  for (const oldMode of ["public", "approval", "private"] as const) {
+    if (oldMode === mode) continue;
+    expect(await t.mutation(api.questions.submit, { boxId, clientId: "anonymous-client-001", content: "保持する質問", expectedVisibilityMode: oldMode })).toEqual({ visibilityMode: mode });
+  }
+  expect(await t.run(ctx => ctx.db.query("questions").collect())).toHaveLength(0);
+  expect(await t.run(ctx => ctx.db.query("questionRateLimits").collect())).toHaveLength(0);
+  await t.mutation(api.questions.submit, { boxId, clientId: "anonymous-client-001", content: "保持する質問", expectedVisibilityMode: mode });
+  expect(await t.run(ctx => ctx.db.query("questions").collect())).toHaveLength(1);
+});
+
 it.each(["public", "approval", "private"] as const)("%sモードの匿名投稿と保存データ", async mode => {
   const t = convexTest(schema, modules);
   const owner = t.withIdentity({ subject: "owner", name: "Alice" });

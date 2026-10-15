@@ -15,12 +15,12 @@ vi.mock("next/navigation", () => ({ notFound: mocks.notFound, useRouter: () => (
 beforeEach(() => { vi.stubEnv("NEXT_PUBLIC_CONVEX_URL", "https://deployment.example"); mocks.fetch.mockReset(); mocks.notFound.mockClear(); });
 afterEach(() => vi.unstubAllEnvs());
 it("公開質問箱に宛先・匿名投稿・公開範囲・空状態を表示", async () => {
-  mocks.fetch.mockResolvedValue({ profile: { username: "alice", displayName: "アリス" }, box: { id: "box" } });
+  mocks.fetch.mockResolvedValue({ profile: { username: "alice", displayName: "アリス" }, box: { id: "box", visibilityMode: "approval" } });
   render(await PublicPage({ params: Promise.resolve({ username: "alice" }) }));
   expect(screen.getByRole("heading", { level: 1, name: "アリス" })).toBeVisible();
   expect(screen.getByLabelText("質問内容")).toBeVisible();
   expect(screen.getByText(/投稿者のアカウント情報は保存しません/)).toBeVisible();
-  expect(screen.getByText(/公開モードでは未回答の質問も表示/)).toBeVisible();
+  expect(screen.getByText("現在の公開モード：承認制")).toBeVisible();
   expect(screen.getByText("まだ公開されている質問はありません")).toBeVisible();
   expect(screen.getByRole("button", { name: "質問を送信" })).toBeDisabled();
 });
