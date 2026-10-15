@@ -62,10 +62,15 @@ it("実コンポーネントの長文・QR・回答/削除・設定・各状態�
     cleanup();
   }
   const boxId = "box" as Id<"questionBoxes">;
-  capture("shared-public", <main className="space-y-6 p-4 sm:p-6"><header className="card space-y-3"><h1 className="break-words text-2xl font-bold">{sharedBox.name}</h1><p className="whitespace-pre-wrap break-words">{sharedBox.description}</p><ShareButton slug={sharedBox.slug} name={sharedBox.name} /></header><QuestionComposer boxId={boxId} /><QuestionFeed boxId={boxId} /></main>, () => {
+  for (const boxKind of ["personal", "shared"] as const) {
+    for (const visibilityMode of ["public", "approval", "private"] as const) {
+      capture(`visibility-${boxKind}-${visibilityMode}`, <main className="p-4 sm:p-6"><QuestionComposer boxId={boxId} boxKind={boxKind} visibilityMode={visibilityMode} /></main>);
+    }
+  }
+  capture("shared-public", <main className="space-y-6 p-4 sm:p-6"><header className="card space-y-3"><h1 className="break-words text-2xl font-bold">{sharedBox.name}</h1><p className="whitespace-pre-wrap break-words">{sharedBox.description}</p><ShareButton slug={sharedBox.slug} name={sharedBox.name} /></header><QuestionComposer boxId={boxId} boxKind="shared" visibilityMode="approval" /><QuestionFeed boxId={boxId} /></main>, () => {
     fireEvent.click(screen.getByRole("button", { name: "QRコードを表示" }));
   });
-  const publicPage = <main className="space-y-6 p-4 sm:p-6"><ProfileHeader profile={{ username: "owner", displayName: "長い表示名".repeat(12), bio: longText }} /><QuestionComposer boxId={boxId} /><QuestionFeed boxId={boxId} /></main>;
+  const publicPage = <main className="space-y-6 p-4 sm:p-6"><ProfileHeader profile={{ username: "owner", displayName: "長い表示名".repeat(12), bio: longText }} /><QuestionComposer boxId={boxId} boxKind="personal" visibilityMode="approval" /><QuestionFeed boxId={boxId} /></main>;
   capture("public", publicPage, () => {
     fireEvent.click(screen.getByRole("button", { name: "QRコードを表示" }));
     expect(screen.getByTitle("質問箱を開くQRコード")).toBeInTheDocument();

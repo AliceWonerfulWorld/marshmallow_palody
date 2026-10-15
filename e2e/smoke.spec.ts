@@ -28,6 +28,7 @@ for (const width of [320, 375, 390, 430, 1440]) {
         await expect(page.getByText("現在ログインを利用できません。")).toBeVisible();
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
     }
     const response = await page.goto("/definitely-not-a-page");
     expect(response?.status()).toBe(404);
@@ -45,6 +46,13 @@ for (const width of [320, 375, 390, 430, 1440]) {
     for (const [name, html] of Object.entries(fixtures)) {
       await page.setContent(`<html lang="ja"><head><style>${css}</style></head><body>${html}</body></html>`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      if (name.startsWith("visibility-")) {
+        const [, kind, mode] = name.split("-");
+        const modeNames: Record<string, string> = { public: "公開", approval: "承認制", private: "非公開" };
+        await expect(page.getByText(`現在の公開モード：${modeNames[mode]}`)).toBeVisible();
+        await expect(page.getByText(mode === "public" ? /送信直後から、未回答の質問も誰でも/ : kind === "shared" ? /送信直後の未回答の質問は、この箱のオーナーと参加メンバー全員/ : /送信直後の未回答の質問は、この箱の所有者だけ/)).toBeVisible();
+        await expect(page.getByLabel("質問内容")).toHaveAccessibleDescription(/送信直後/);
+      }
       for (const textarea of await page.locator("textarea").all()) {
         expect(await textarea.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(16);
         const box = await textarea.boundingBox();

@@ -17,7 +17,7 @@ export default async function SharedPublicPage({ params }: { params: Promise<{ s
       <p className="metadata">質問・お便りを募集する公開ページです。</p>
       <ShareButton slug={box.slug!} name={box.name!} />
     </header>
-    <QuestionComposer boxId={box.id} />
+    <QuestionComposer key={box.id} boxId={box.id} boxKind="shared" visibilityMode={box.visibilityMode} />
     <QuestionFeed boxId={box.id} />
   </main>;
 }
